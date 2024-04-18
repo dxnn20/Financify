@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "2310216331",
+    "firebase_url": "https://financify-27722-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "financify-27722",
+    "storage_bucket": "financify-27722.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:2310216331:android:7462f77b9c69985f4bd28e",
+        "android_client_info": {
+          "package_name": "com.example.financify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "2310216331-4siafs5sutck5n38n5kovi8rc4qfgpf1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_g-c3evNH1WxRYCUP-uWQoSAe_DphmyY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "2310216331-4siafs5sutck5n38n5kovi8rc4qfgpf1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
