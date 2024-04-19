@@ -16,20 +16,24 @@ class FireBaseAuthService{
     }
   }
 
-  Future<User?> signUpWithEmailAndPassword(String email, String password) async {
+  Future<User?> signUpWithEmailAndPassword(String email, String password, String username) async {
     try {
       UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email,
           password: password
       );
+      await userCredential.user!.updateDisplayName(username);
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
-      throw e;
+      rethrow;
     }
+  }
+
+  User? getCurrentUser() {
+    return _firebaseAuth.currentUser;
   }
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
   }
-
 }

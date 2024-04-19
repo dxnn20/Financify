@@ -1,57 +1,125 @@
-//placeholder HOMEPAGE
-
+import 'package:financify/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import '/user-auth/firebase-auth/firebase-auth-services.dart';
 
-import '../main.dart';
+class HomePage extends StatefulWidget {
+  HomePage({Key? key}) : super(key: key);
 
-class HomePage extends StatefulWidget{
-  const HomePage({super.key});
+  FireBaseAuthService _auth = FireBaseAuthService();
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>{
+class _HomePageState extends State<HomePage> {
+  final FireBaseAuthService _auth = FireBaseAuthService();
+
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/media/1x/login-bg.png"),
-                  fit: BoxFit.cover,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Container(
+              constraints: const BoxConstraints.expand(),
+              margin: const EdgeInsets.only(right: 10, top: 10),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Column(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.person),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/profile');
+                      },
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Provider.of<ThemeProvider>(context, listen: false)
+                            .toggleTheme();
+                      },
+                      icon: const Icon(Icons.sunny),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.logout),
+                      onPressed: () {
+                        _auth.signOut();
+                        print('User signed out');
+                        Navigator.pushNamed(context, '/login');
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),
-          ),
-          Center(
-            child: Container(
-              width: 300,
-              margin: const EdgeInsets.only(bottom: 20),
-              height: 100,
-              decoration: BoxDecoration(
-                color: Pallete.pallete[50],
-                borderRadius: BorderRadius.all(Radius.circular(20)
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  'Financify',
-                  style: TextStyle(
-                    color: Pallete.pallete[100],
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
+
+            Center(
+              child: Container(
+                alignment: Alignment.center,
+                width: MediaQuery.of(context).size.width * 0.8,
+                constraints: const BoxConstraints(maxWidth: 900, minWidth: 300),
+                // Limit width to 300
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(),
                 ),
               ),
             ),
-          ),
-        ],
+            Center(
+              child: Container(
+                alignment: Alignment.center,
+                width: MediaQuery.of(context).size.width * 0.7,
+                constraints: const BoxConstraints(maxWidth: 900, minWidth: 300),
+                // Limit width to 300
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(),
+                ),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: 300,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          width: 1,
+                        ),
+                      ),
+                      padding: const EdgeInsets.all(20),
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: Padding(
+                          padding: EdgeInsets.all(
+                              MediaQuery.of(context).size.width * 0.02),
+                          child: Column(
+                            children: <Widget>[
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  'Hello, ${_auth.getCurrentUser()?.displayName}',
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

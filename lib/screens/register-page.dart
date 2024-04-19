@@ -29,7 +29,7 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
-    _auth.signUpWithEmailAndPassword(emailController.text, passwordController.text).then((value) {
+    _auth.signUpWithEmailAndPassword(emailController.text, passwordController.text, usernameController as String).then((value) {
       Navigator.pushNamed(context, '/login');
       print('User signed up successfully');
     }).catchError((error) {
@@ -79,7 +79,6 @@ class _RegisterPageState extends State<RegisterPage> {
               margin: const EdgeInsets.only(bottom: 20),
               height: 150,
               decoration: BoxDecoration(
-                color: Pallete.pallete[50],
                 borderRadius: const BorderRadius.all(Radius.circular(20)
                 ),
               ),
@@ -100,10 +99,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 width: 300,
                 height: 430,
                 decoration: BoxDecoration(
-                  color: Pallete.pallete,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: Pallete.pallete,
                     width: 1,
                   ),
                   boxShadow: [
@@ -122,7 +119,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     Text(
                       'Sign up',
                       style: TextStyle(
-                        color: Pallete.pallete[200],
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
@@ -171,7 +167,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       onPressed: () {
                         Navigator.pushNamed(context, '/login');
                       },
-                      child: Text('Or Login', style: TextStyle(color: Pallete.pallete[200])),
+                      child: Text('Or Login'),
                     ),
                   ],
                 ),

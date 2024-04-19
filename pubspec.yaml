@@ -32,6 +32,8 @@ dependencies:
   firebase_core: ^2.30.0
   firebase_database: ^10.5.2
   firebase_auth: ^4.6.3
+  lottie: ^3.0.0
+  provider: ^5.0.0
 
   flutter:
     sdk: flutter
@@ -69,6 +71,7 @@ flutter:
   assets:
      - assets/
      - assets/media/1x/
+     - assets/media/1x/card-bg.png
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
