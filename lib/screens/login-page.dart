@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../main.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import '../user-auth/firebase-auth/firebase-auth-services.dart';
+import '../security/firebase-auth/firebase-auth-services.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -96,13 +96,13 @@ class _LoginPageState extends State<LoginPage> {
               borderRadius: BorderRadius.circular(15),
               border: Border.all(
                 width: 1,
+                ),
               ),
-            ),
-            padding: const EdgeInsets.all(20),
-            child: Column(
+              padding: const EdgeInsets.all(20),
+              child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(
+                const Text(
                   'Login',
                   style: TextStyle(
                     fontSize: 24,

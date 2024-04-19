@@ -1,7 +1,8 @@
-import 'package:financify/user-auth/firebase-auth/firebase-auth-services.dart';
+import 'package:financify/security/firebase-auth/firebase-auth-services.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import '../main.dart';
 import 'package:financify/screens/login-page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -29,7 +30,7 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
-    _auth.signUpWithEmailAndPassword(emailController.text, passwordController.text, usernameController as String).then((value) {
+    _auth.signUpWithEmailAndPassword(emailController.text, passwordController.text, usernameController.text).then((value) {
       Navigator.pushNamed(context, '/login');
       print('User signed up successfully');
     }).catchError((error) {
@@ -63,12 +64,37 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       body: Stack(
         children: [
-          Positioned.fill(
+          // Positioned.fill(
+          //   // child: Container(
+          //   //   decoration: const BoxDecoration(
+          //   //     image: DecorationImage(
+          //   //       image: AssetImage("assets/media/1x/login-bg.png"),
+          //   //       fit: BoxFit.cover,
+          //   //     ),
+          //   //   ),
+          //   // ),
+          // ),
+          Align(
+            alignment: Alignment.topRight,
             child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/media/1x/login-bg.png"),
-                  fit: BoxFit.cover,
+                margin: const EdgeInsets.all(50),
+                child: IconButton(
+                  onPressed: () {
+                    Provider.of<ThemeProvider>(context, listen: false)
+                        .toggleTheme();
+                  },
+                  icon: const Icon(Icons.sunny),
+                )),
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              margin: const EdgeInsets.only(top: 50),
+              child: const Text(
+                'Financify',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -82,16 +108,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 borderRadius: const BorderRadius.all(Radius.circular(20)
                 ),
               ),
-              child: const Center(
-                child: Text(
-                  'Financify',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
             ),
           ),
           Center(
@@ -103,23 +119,14 @@ class _RegisterPageState extends State<RegisterPage> {
                   border: Border.all(
                     width: 1,
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
                 ),
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      'Sign up',
-                      style: TextStyle(
-                        fontSize: 24,
+                    const Text('Sign up',
+                    style: TextStyle(
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -159,7 +166,10 @@ class _RegisterPageState extends State<RegisterPage> {
                       onPressed: () {
                         _signUp();
                       },
-                      child: const Text('Sign up!'
+                      child: Text('Sign up!',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                        )
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -167,7 +177,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       onPressed: () {
                         Navigator.pushNamed(context, '/login');
                       },
-                      child: Text('Or Login'),
+                      child: Text('Or Login',
+                        style: TextStyle(
+                          color: Theme.of(context).secondaryHeaderColor,
+                        ),
+                      ),
                     ),
                   ],
                 ),

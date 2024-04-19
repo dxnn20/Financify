@@ -1,3 +1,4 @@
+import 'package:financify/screens/budgets-page.dart';
 import 'package:financify/screens/home-page.dart';
 import 'package:financify/screens/login-page.dart';
 import 'package:financify/screens/profile-page.dart';
@@ -79,6 +80,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => RegisterPage(),
         '/home': (context) => HomePage(),
         '/profile': (context) => ProfilePage(),
+        '/budgets': (context) => BudgetsPage(),
       },
     );
   }

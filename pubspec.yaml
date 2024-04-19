@@ -34,6 +34,7 @@ dependencies:
   firebase_auth: ^4.6.3
   lottie: ^3.0.0
   provider: ^5.0.0
+  uuid: ^3.0.4
 
   flutter:
     sdk: flutter

@@ -7,6 +7,7 @@ class Expense {
   final String? description;
   final String? category;
   final String userId;
+  final String budgetId;
 
   Expense({
     required this.id,
@@ -15,6 +16,7 @@ class Expense {
     this.date,
     this.description = 'A simple expense',
     this.category = 'Miscellaneous',
-    required this.userId
+    required this.userId,
+    required this.budgetId
   });
 }
