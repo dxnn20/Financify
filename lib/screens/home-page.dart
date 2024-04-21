@@ -1,16 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:financify/main.dart';
 import 'package:financify/security/firebase-budget-service/firebase-budget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import '../entities/Expense.dart';
 import '../page-components/AddBudgetModal.dart';
-import '/security/firebase-auth/firebase-auth-services.dart';
+import '/security/user-auth/firebase-auth/firebase-auth-services.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
-
-  FireBaseAuthService _auth = FireBaseAuthService();
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -19,10 +19,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final FireBaseAuthService _auth = FireBaseAuthService();
   final FireBaseBudgetService _budgetService = FireBaseBudgetService();
+  final List<Expense> expenses = [];
+
+  String? get userId => null;
 
   @override
   Widget build(BuildContext context) {
-    void _openAddBudgetModal(BuildContext context) {
+    void openAddBudgetModal(BuildContext context) {
       showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
@@ -97,11 +100,10 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   children: [
                     const SizedBox(height: 20),
-
                     // Card container
                     Container(
                       width: MediaQuery.of(context).size.width * 0.8,
-                      height: 300,
+                      constraints: const BoxConstraints(maxHeight: 300),
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.onSurface,
                         borderRadius: BorderRadius.circular(20),
@@ -136,15 +138,30 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Align(
                                       alignment: Alignment.topRight,
-                                      child: FutureBuilder(
-                                        future: _budgetService.getBudgetsSum(),
+                                      child: StreamBuilder(
+                                        stream: FirebaseFirestore.instance
+                                            .collection('users')
+                                            .doc(_auth.getCurrentUser()?.uid)
+                                            .collection('budgets')
+                                            .snapshots(),
                                         builder: (context, snapshot) {
+                                          if (snapshot.hasError) {
+                                            return Text(
+                                                'Error: ${snapshot.error}');
+                                          }
+
                                           if (snapshot.connectionState ==
                                               ConnectionState.waiting) {
                                             return const CircularProgressIndicator();
                                           }
+
+                                          double totalBalance = 0.0;
+                                          for (var budgetDoc in snapshot.data!.docs) {
+                                            totalBalance +=
+                                                budgetDoc['amount'] ?? 0.0;
+                                          }
                                           return Text(
-                                              '\$${snapshot.data ?? 0}',
+                                              '\$${totalBalance.toString() ?? 0}',
                                               style: TextStyle(
                                                 color: Theme.of(context)
                                                     .colorScheme
@@ -178,7 +195,7 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     IconButton(
                                       onPressed: () {
-                                        _openAddBudgetModal(context);
+                                        openAddBudgetModal(context);
                                       },
                                       icon: Icon(
                                         Icons.add,
@@ -206,7 +223,32 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-                    )
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      constraints: const BoxConstraints(maxHeight: 300),
+                      child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: Align(
+                              alignment: Alignment.center,
+                              child: ListView(
+                                scrollDirection: Axis.vertical,
+                                children: <Widget>[
+                                  Card(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                    child: ListTile(
+                                      title: Text('Expense 1'),
+                                      subtitle: Text('Expense 1 Description'),
+                                      trailing: Text('\$100.00'),
+                                    ),
+                                  )
+                                ],
+                              ))),
+                    ),
                   ],
                 ),
               ),

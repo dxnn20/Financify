@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:financify/security/firebase-auth/firebase-auth-services.dart';
 import 'package:financify/security/firebase-budget-service/firebase-budget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import '../entities/Budget.dart';
+import '/security/user-auth/firebase-auth/firebase-auth-services.dart';
 
 class AddBudgetModal extends StatelessWidget {
   const AddBudgetModal({super.key});
@@ -41,6 +42,7 @@ class AddBudgetModal extends StatelessWidget {
           amount: double.parse(amountController.text),
           startDate: startDateController.text,
           endDate: endDateController.text,
+          id: Uuid().v4(),
         );
 
         await _budgetService.addBudget(budget);

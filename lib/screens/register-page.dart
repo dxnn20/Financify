@@ -1,4 +1,3 @@
-import 'package:financify/security/firebase-auth/firebase-auth-services.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -6,6 +5,8 @@ import 'package:provider/provider.dart';
 import '../main.dart';
 import 'package:financify/screens/login-page.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+import '/security/user-auth/firebase-auth/firebase-auth-services.dart';
 
 class RegisterPage extends StatefulWidget{
   const RegisterPage({super.key});

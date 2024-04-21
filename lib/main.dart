@@ -25,7 +25,6 @@ class ThemeProvider with ChangeNotifier {
   ThemeData get currentTheme => _currentTheme;
 
   void toggleTheme() {
-    print('Current index: $_currentIndex');
     _currentIndex = (_currentIndex + 1) % _themes.length;
     _currentTheme = _themes[_currentIndex];
     notifyListeners(); // Notify listeners to rebuild UI
@@ -49,8 +48,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    bool isLoggedIn = false;
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Financify',

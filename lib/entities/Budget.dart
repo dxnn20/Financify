@@ -1,6 +1,6 @@
 
 class Budget{
-  String? id;
+  String id;
   String name;
   double amount;
   String startDate;
@@ -8,7 +8,7 @@ class Budget{
   String userId;
 
   Budget({
-    this.id,
+    required this.id,
     required this.name,
     required this.amount,
     required this.startDate,

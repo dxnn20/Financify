@@ -13,8 +13,7 @@ class FireBaseBudgetService{
   Future<void> addBudget(Budget budget) async {
     try {
         await _firebaseAuth.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('budgets').doc(budgetId).set({
-          'budgetid': budgetId,
-          'userid': FirebaseAuth.instance.currentUser!.uid,
+          'budgetId': budgetId,
           'name': budget.name,
           'amount': budget.amount,
           'startdate': budget.startDate,
@@ -28,7 +27,8 @@ class FireBaseBudgetService{
 
   Future<void> updateBudget(Budget budget) async {
     try {
-        await _firebaseAuth.collection('budgets').doc(budget.id).update({
+        print('Before' + budget.toString());
+        await _firebaseAuth.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('budgets').doc(budget.id).update({
           'id': budget.id,
           'name': budget.name,
           'amount': budget.amount,
@@ -36,6 +36,7 @@ class FireBaseBudgetService{
           'enddate': budget.endDate,
           'userId': FirebaseAuth.instance.currentUser!.uid
         });
+        print('After' + budget.toString());
     } on FirebaseAuthException catch (e) {
       rethrow;
     }
@@ -56,4 +57,28 @@ class FireBaseBudgetService{
     }
   }
 
+  getBudgets() async{
+    var data = await _firebaseAuth.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('budgets').get();
+
+    List<Budget> budgets = [];
+
+    for (var element in data.docs) {
+      Budget budget = Budget(
+        userId: element['userid'],
+        id: element['budgetid'],
+        name: element['name'],
+        amount: element['amount'],
+        startDate: element['startdate'],
+        endDate: element['enddate'],
+      );
+
+      budgets.add(budget);
+    }
+
+    return budgets;
+  }
+
+  void deleteBudget(String id) {
+    _firebaseAuth.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('budgets').doc(id).delete();
+  }
 }

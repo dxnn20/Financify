@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../main.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import '../security/firebase-auth/firebase-auth-services.dart';
+import '/security/user-auth/firebase-auth/firebase-auth-services.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
