@@ -17,8 +17,8 @@ class ThemeProvider with ChangeNotifier {
   final List<ThemeData> _themes = [
     CustomTheme.lightTheme,
     CustomTheme.darkTheme,
-    LightTheme().data,
-    DarkTheme().data,
+    CustomTheme.cute,
+    CustomTheme.cuteLight,
     // Add more themes here as needed
   ];
 
@@ -27,6 +27,7 @@ class ThemeProvider with ChangeNotifier {
   void toggleTheme() {
     _currentIndex = (_currentIndex + 1) % _themes.length;
     _currentTheme = _themes[_currentIndex];
+    print('Current theme: $_currentIndex');
     notifyListeners(); // Notify listeners to rebuild UI
   }
 }
@@ -89,32 +90,6 @@ class AppTheme {
   AppTheme(this.data);
 }
 
-class LightTheme extends AppTheme {
-  LightTheme() : super(ThemeData.light());
-
-  static ThemeData _buildLightTheme() {
-    final ThemeData base = ThemeData.light();
-    return base.copyWith(
-      colorScheme: base.colorScheme.copyWith(
-        onPrimary: const Color(0xFF222831),
-      ),
-    );
-  }
-}
-
-class DarkTheme extends AppTheme {
-  DarkTheme() : super(ThemeData.dark());
-
-  static ThemeData _buildDarkTheme() {
-    final ThemeData base = ThemeData.dark();
-    return base.copyWith(
-      colorScheme: base.colorScheme.copyWith(
-        onPrimary: const Color(0xFF222831),
-      ),
-    );
-  }
-}
-
 class CustomTheme {
   static final lightTheme = ThemeData(
       primaryColor: Color(0xFF222831),
@@ -123,7 +98,7 @@ class CustomTheme {
       brightness: Brightness.light,
       colorScheme: const ColorScheme(background: Color(0xFF222831),
           brightness: Brightness.light,
-          error: Color(0xFF8B322C0),
+          error: Color(0xFFD20062),
           onBackground: Color(0xFFEEEEEE),
           onError: Color(0xFF31363F),
           onPrimary: Color(0xFF222831),
@@ -142,7 +117,7 @@ class CustomTheme {
       brightness: Brightness.dark,
       colorScheme: ColorScheme(background: Color(0xFFEEEEEE),
           brightness: Brightness.dark,
-          error: Color(0xFF000000),
+          error: Color(0xFFD20062),
           onBackground: Color(0xFF000000),
           onError: Color(0xFF000000),
           onPrimary: Color(0xFFEEEEEE),
@@ -152,4 +127,43 @@ class CustomTheme {
           secondary: Color(0xFF000000),
           surface: Color(0xFF000000)
       ));
+
+  static final ThemeData cute = ThemeData(
+    primaryColor: const Color(0xFF153448),
+    hintColor: const Color(0xFF153448),
+    brightness: Brightness.light,
+    colorScheme: const ColorScheme(
+      primary: Color(0xFF153448),
+      secondary: Color(0xFF153448),
+      surface: Color(0xFFE5DDC5),
+      background: Color(0xFF153448),
+      error: Color(0xFF803D3B),
+      onPrimary: Color(0xFF153448),
+      onSecondary: Color(0xFFE5DDC5),
+      onSurface: Color(0xFFE5DDC5),
+      onBackground: Color(0xFFE5DDC5),
+      onError: Color(0xFF153448),
+      brightness: Brightness.light,
+    ),
+  );
+
+  static final ThemeData cuteLight = ThemeData(
+    primaryColor: const Color(0xFF153448),
+    hintColor: const Color(0xFF153448),
+    brightness: Brightness.dark,
+    colorScheme: const ColorScheme(
+      primary: Color(0xFF153448),
+      secondary: Color(0xFF153448),
+      surface: Color(0xFFE5DDC5),
+      background: Color(0xFFB3C8CF),
+      error: Color(0xFF803D3B),
+      onPrimary: Color(0xFF153448),
+      onSecondary: Color(0xFF153448),
+      onSurface: Color(0xFFE5DDC5),
+      onBackground: Color(0xFF153448),
+      onError: Color(0xFF153448),
+      brightness: Brightness.dark,
+    ),
+  );
+
 }

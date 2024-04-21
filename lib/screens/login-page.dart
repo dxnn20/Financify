@@ -63,8 +63,11 @@ class _LoginPageState extends State<LoginPage> {
                   ),
             ),
           ),
+          // Theme toggle button
           Align(
             alignment: Alignment.topRight,
+
+            // Theme toggle button container
             child: Container(
                 margin: const EdgeInsets.all(50),
                 child: IconButton(
@@ -94,9 +97,18 @@ class _LoginPageState extends State<LoginPage> {
             height: 400,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
+              color: Theme.of(context).colorScheme.background,
               border: Border.all(
                 width: 1,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context).colorScheme.primary,
+                    blurRadius: 15,
+                    offset: const Offset(10, 10),
+                    spreadRadius: 5,
+                  ),
+                ],
               ),
               padding: const EdgeInsets.all(20),
               child: Column(

@@ -15,4 +15,8 @@ class Budget{
     required this.endDate,
     required this.userId,
   });
+
+   getId() {
+     return id;
+   }
 }

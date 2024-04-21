@@ -27,14 +27,19 @@ class ModifyBudgetModal {
         ],
       ),
       actions: <Widget>[
-        ElevatedButton(
+        GestureDetector(
+          onTap: null,
+        child: ElevatedButton(
           child: Text(
             'Cancel',
             style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
           ),
           onPressed: () => Navigator.of(context).pop(),
+          ),
         ),
-        ElevatedButton(
+        GestureDetector(
+          onTap: null,
+        child: ElevatedButton(
           child: Text(
             'Save',
             style: TextStyle(
@@ -45,6 +50,7 @@ class ModifyBudgetModal {
             _budgetService.updateBudget(budget);
             Navigator.of(context).pop();
           },
+        ),
         ),
       ],
     );

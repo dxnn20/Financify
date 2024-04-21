@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../entities/Expense.dart';
+
 class FireBaseBudgetService{
   final FirebaseFirestore _firebaseAuth = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -27,7 +29,7 @@ class FireBaseBudgetService{
 
   Future<void> updateBudget(Budget budget) async {
     try {
-        print('Before' + budget.toString());
+
         await _firebaseAuth.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('budgets').doc(budget.id).update({
           'id': budget.id,
           'name': budget.name,
@@ -36,7 +38,7 @@ class FireBaseBudgetService{
           'enddate': budget.endDate,
           'userId': FirebaseAuth.instance.currentUser!.uid
         });
-        print('After' + budget.toString());
+
     } on FirebaseAuthException catch (e) {
       rethrow;
     }
@@ -57,17 +59,17 @@ class FireBaseBudgetService{
     }
   }
 
-  getBudgets() async{
+  Future getBudgets() async{
     var data = await _firebaseAuth.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('budgets').get();
 
     List<Budget> budgets = [];
 
     for (var element in data.docs) {
       Budget budget = Budget(
-        userId: element['userid'],
-        id: element['budgetid'],
+        userId: element['userId'],
+        id: element['budgetId'],
         name: element['name'],
-        amount: element['amount'],
+        amount: element['amount'].toDouble(),
         startDate: element['startdate'],
         endDate: element['enddate'],
       );
@@ -81,4 +83,10 @@ class FireBaseBudgetService{
   void deleteBudget(String id) {
     _firebaseAuth.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('budgets').doc(id).delete();
   }
+
+  String getBudgetId(){
+    return budgetId;
+  }
+
+
 }

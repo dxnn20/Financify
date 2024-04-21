@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:financify/entities/Budget.dart';
 import 'package:financify/main.dart';
 import 'package:financify/security/firebase-budget-service/firebase-budget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import '../entities/Expense.dart';
 import '../page-components/AddBudgetModal.dart';
+import '../security/firebase-expense-service/firebase-expense.dart';
 import '/security/user-auth/firebase-auth/firebase-auth-services.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,9 +22,21 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final FireBaseAuthService _auth = FireBaseAuthService();
   final FireBaseBudgetService _budgetService = FireBaseBudgetService();
-  final List<Expense> expenses = [];
+  List<Expense> expenses = [];
+  List<Budget> budgets = [];
 
-  String? get userId => null;
+  @override
+  void initState() {
+    super.initState();
+    loadExpenses();
+  }
+
+  Future loadExpenses() async {
+    List<Expense> loadedExpenses =
+        await FireBaseExpenseService().getLast5Expenses();
+
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +53,7 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: Stack(
           children: [
+            // Side menu
             Container(
               constraints: const BoxConstraints.expand(),
               margin: const EdgeInsets.only(right: 10, top: 10),
@@ -90,7 +106,7 @@ class _HomePageState extends State<HomePage> {
               child: Container(
                 alignment: Alignment.center,
                 width: MediaQuery.of(context).size.width * 0.7,
-                constraints: const BoxConstraints(maxWidth: 900, minWidth: 300),
+                constraints: const BoxConstraints(maxWidth: 900, minWidth: 250),
                 // Limit width to 300
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(),
@@ -103,13 +119,20 @@ class _HomePageState extends State<HomePage> {
                     // Card container
                     Container(
                       width: MediaQuery.of(context).size.width * 0.8,
-                      constraints: const BoxConstraints(maxHeight: 300),
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.onSurface,
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
                           width: 1,
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Theme.of(context).colorScheme.primary,
+                            blurRadius: 20,
+                            offset: const Offset(0, 0),
+                            spreadRadius: 3,
+                          ),
+                        ],
                       ),
                       padding: const EdgeInsets.all(20),
                       child: Align(
@@ -136,42 +159,6 @@ class _HomePageState extends State<HomePage> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    Align(
-                                      alignment: Alignment.topRight,
-                                      child: StreamBuilder(
-                                        stream: FirebaseFirestore.instance
-                                            .collection('users')
-                                            .doc(_auth.getCurrentUser()?.uid)
-                                            .collection('budgets')
-                                            .snapshots(),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasError) {
-                                            return Text(
-                                                'Error: ${snapshot.error}');
-                                          }
-
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            return const CircularProgressIndicator();
-                                          }
-
-                                          double totalBalance = 0.0;
-                                          for (var budgetDoc in snapshot.data!.docs) {
-                                            totalBalance +=
-                                                budgetDoc['amount'] ?? 0.0;
-                                          }
-                                          return Text(
-                                              '\$${totalBalance.toString() ?? 0}',
-                                              style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onPrimary,
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.bold,
-                                              ));
-                                        },
-                                      ),
-                                    ),
                                   ],
                                 ),
                               ),
@@ -188,32 +175,108 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ],
                               ),
+                              const SizedBox(height: 20),
+                              Container(
+                                alignment: Alignment.topLeft,
+                                width: MediaQuery.of(context).size.width,
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: StreamBuilder(
+                                    stream: FirebaseFirestore.instance
+                                        .collection('users')
+                                        .doc(_auth.getCurrentUser()?.uid)
+                                        .collection('budgets')
+                                        .snapshots(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasError) {
+                                        return Text('Error: ${snapshot.error}');
+                                      }
+
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const CircularProgressIndicator();
+                                      }
+
+                                      double totalBalance = 0.0;
+                                      for (var budgetDoc
+                                          in snapshot.data!.docs) {
+                                        totalBalance +=
+                                            budgetDoc['amount'] ?? 0.0;
+                                      }
+                                      return Text(
+                                          '\$${totalBalance.toString() ?? 0}',
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary,
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                          ));
+                                    },
+                                  ),
+                                ),
+                              ),
                               Align(
                                 alignment: Alignment.bottomCenter,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        openAddBudgetModal(context);
-                                      },
-                                      icon: Icon(
-                                        Icons.add,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary,
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
                                       ),
+                                      child: TextButton.icon(
+                                          icon: Icon(
+                                            Icons.add,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary,
+                                          ), onPressed: () {
+                                          openAddBudgetModal(context);
+                                        }, label: Text(
+                                            'Add Budget',
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary,
+                                            ),
+                                          ),
+                                        ),
                                     ),
-                                    IconButton(
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                            context, '/profile');
-                                      },
-                                      icon: Icon(
-                                        Icons.person,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary,
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                      ),
+                                      child: TextButton.icon(
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                              context, '/profile');
+                                        },
+                                        icon: Icon(
+                                          Icons.person,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                        ), label: Text('Profile',
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimary,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -227,27 +290,112 @@ class _HomePageState extends State<HomePage> {
 
                     const SizedBox(height: 20),
 
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      constraints: const BoxConstraints(maxHeight: 300),
-                      child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          child: Align(
-                              alignment: Alignment.center,
-                              child: ListView(
-                                scrollDirection: Axis.vertical,
-                                children: <Widget>[
-                                  Card(
+                    Column(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            child: Text('Here\'s your last few expenses:',
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          constraints: const BoxConstraints(
+                              maxHeight: 300, maxWidth: 900, minWidth: 250),
+                          child: Container(
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              constraints: const BoxConstraints(
+                                  maxHeight: 300, maxWidth: 500, minWidth: 250),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.onSurface,
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  width: 1,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
                                     color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                    child: ListTile(
-                                      title: Text('Expense 1'),
-                                      subtitle: Text('Expense 1 Description'),
-                                      trailing: Text('\$100.00'),
-                                    ),
-                                  )
+                                        Theme.of(context).colorScheme.primary,
+                                    blurRadius: 20,
+                                    offset: const Offset(0, 0),
+                                    spreadRadius: 3,
+                                  ),
                                 ],
-                              ))),
+                              ),
+                              child: Align(
+                                  alignment: Alignment.center,
+                                  child: FutureBuilder(
+                                      future: FireBaseExpenseService()
+                                          .getLast5Expenses(),
+                                      // a Future<String> or null
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const CircularProgressIndicator();
+                                        }
+                                        if (snapshot.hasError) {
+                                          return Text(
+                                              'Error: ${snapshot.error}');
+                                        }
+                                        List<Expense> expenses =
+                                            snapshot.data as List<Expense>;
+                                        return ListView.builder(
+                                          itemCount: expenses.length,
+                                          itemBuilder: (context, index) {
+                                            return Card(
+                                              child: ListTile(
+                                                  style: ListTileStyle.list,
+                                                  title: Text(
+                                                      expenses[index].title,
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onPrimary,
+                                                      )),
+                                                  subtitle: Text(
+                                                    expenses[index].date,
+                                                    style: TextStyle(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onPrimary,
+                                                    ),
+                                                  ),
+                                                  trailing: Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                      border: Border.all(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .error,
+                                                      ),
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(5),
+                                                    child: Text(
+                                                      '\$${expenses[index].amount.toString()}',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .error,
+                                                      ),
+                                                    ),
+                                                  )),
+                                            );
+                                          },
+                                        );
+                                      }))),
+                        ),
+                      ],
                     ),
                   ],
                 ),
