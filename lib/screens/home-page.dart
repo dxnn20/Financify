@@ -319,7 +319,7 @@ class _HomePageState extends State<HomePage> {
                                 width: MediaQuery.of(context).size.width,
                                 constraints: const BoxConstraints(
                                     maxHeight: 300,
-                                    maxWidth: 500,
+                                    maxWidth: 700,
                                     minWidth: 250),
                                 decoration: BoxDecoration(
                                   color:
