@@ -1,10 +1,6 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import '../main.dart';
-import 'package:financify/screens/login-page.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 import '/security/user-auth/firebase-auth/firebase-auth-services.dart';
 
@@ -65,16 +61,6 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Positioned.fill(
-          //   // child: Container(
-          //   //   decoration: const BoxDecoration(
-          //   //     image: DecorationImage(
-          //   //       image: AssetImage("assets/media/1x/login-bg.png"),
-          //   //       fit: BoxFit.cover,
-          //   //     ),
-          //   //   ),
-          //   // ),
-          // ),
           Align(
             alignment: Alignment.topRight,
             child: Container(
@@ -105,8 +91,8 @@ class _RegisterPageState extends State<RegisterPage> {
               width: 300,
               margin: const EdgeInsets.only(bottom: 20),
               height: 150,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(20)
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)
                 ),
               ),
             ),
@@ -149,6 +135,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
+                      showCursor: true,
                       controller: passwordController,
                       decoration: const InputDecoration(
                         //errorText: 'Password must be at least 6 characters',

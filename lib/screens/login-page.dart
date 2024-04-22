@@ -1,10 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import '../main.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 import '/security/user-auth/firebase-auth/firebase-auth-services.dart';
 
@@ -17,26 +14,35 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   User? user = FirebaseAuth.instance.currentUser;
+  String invalidCred = '';
+  String emptyField = '';
 
   @override
   Widget build(BuildContext context) {
-    final FireBaseAuthService _auth = FireBaseAuthService();
+    final FireBaseAuthService auth = FireBaseAuthService();
 
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
 
     void login() {
       if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+        setState(() {
+          invalidCred = '';
+          emptyField = 'Please fill in all fields';
+        });
         return;
       }
 
-      _auth
+      auth
           .signInWithEmailAndPassword(
               emailController.text, passwordController.text)
           .then((value) {
         Navigator.pushNamed(context, '/home');
       }).catchError((error) {
-        print('Error: $error');
+        setState(() {
+          emptyField = '';
+          invalidCred = error.toString();
+        });
       });
     }
 
@@ -103,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).hintColor,
                     blurRadius: 15,
                     offset: const Offset(10, 10),
                     spreadRadius: 5,
@@ -138,6 +144,12 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
+                if(invalidCred.isNotEmpty)
+                  Text('Invalid credentials', style: TextStyle(color: Colors.red)),
+                if(emptyField.isNotEmpty)
+                  Text('Please fill in all fields', style: TextStyle(color: Colors.red)),
+
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     login();
@@ -148,6 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                         color: Theme.of(context).colorScheme.onPrimary),
                   ),
                 ),
+
                 const SizedBox(height: 20),
                 TextButton(
                     onPressed: () {

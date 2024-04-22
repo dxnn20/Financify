@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:financify/entities/Budget.dart';
 import 'package:financify/security/firebase-budget-service/firebase-budget.dart';
-import 'package:financify/security/user-auth/firebase-auth/firebase-auth-services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../entities/Expense.dart';
@@ -17,7 +15,7 @@ class FireBaseExpenseService{
     try {
 
       _firebaseAuth.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('budgets').doc(budget.getId()).collection('expenses').add({
-          'expenseId': Uuid().v4(),
+          'expenseId': const Uuid().v4(),
           'title': expense.title,
           'amount': expense.amount,
           'date': expense.date.isEmpty ? DateTime.now().toString() : expense.date,
@@ -50,7 +48,7 @@ class FireBaseExpenseService{
           .collection('budgets')
           .doc(budget.getId())
           .update({'amount': updatedBudgetAmount});
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       // Handle FirebaseAuthException
       rethrow;
     }
@@ -68,7 +66,7 @@ class FireBaseExpenseService{
           'description': expense.description,
           'category': expense.category
         });
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       rethrow;
     }
   }
@@ -114,19 +112,19 @@ class FireBaseExpenseService{
 
       while(true) {
         firstBudget = budgets.first;
-        if (firstBudget.amount > 0) {
+        if ((await FireBaseBudgetService().getExpensesByBudgetId(firstBudget.id)).isNotEmpty ){
           break;
         }
         budgets.removeAt(0);
       }
 
-      if(firstBudget.amount == 0){
-        return [];
-      }
-
       List<Expense> expenses = await FireBaseExpenseService().getExpensesByBudgetId(firstBudget.id);
 
       // Return the first 5 expenses
+      if(expenses.length < 5) {
+        return expenses;
+      }
+
       return expenses.take(5).toList();
     } catch (e) {
       print('Error getting last 5 expenses: $e');
@@ -154,6 +152,18 @@ class FireBaseExpenseService{
       expenses.add(expense);
     }
     return expenses;
+  }
+
+  Future getExpensesSumByBudgetId(String id) async {
+    var data = await _firebaseAuth.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('budgets').doc(id).collection('expenses').get();
+
+    double sum = 0;
+
+    for (var element in data.docs) {
+      sum += element['amount'];
+    }
+
+    return sum;
   }
 
 }

@@ -11,7 +11,7 @@ class FireBaseAuthService{
           password: password
       );
       return userCredential.user;
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       rethrow;
     }
   }
@@ -24,7 +24,7 @@ class FireBaseAuthService{
       );
       await userCredential.user!.updateDisplayName(username);
       return userCredential.user;
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       rethrow;
     }
   }
@@ -35,5 +35,9 @@ class FireBaseAuthService{
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
+  }
+
+  Future<User?> getFutureCurrentUser(){
+    return Future.value(_firebaseAuth.currentUser);
   }
 }

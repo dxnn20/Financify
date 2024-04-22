@@ -1,5 +1,4 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
@@ -20,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
       Future.delayed(const Duration(seconds: 1), () {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => LoginPage()));
+            builder: (_) => const LoginPage()));
       });
     }
 

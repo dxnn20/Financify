@@ -3,12 +3,9 @@ import 'package:financify/screens/home-page.dart';
 import 'package:financify/screens/login-page.dart';
 import 'package:financify/screens/profile-page.dart';
 import 'package:financify/screens/register-page.dart';
-import 'package:financify/screens/splash-screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ThemeProvider with ChangeNotifier {
@@ -40,7 +37,7 @@ void main() async {
   );
 
   runApp(ChangeNotifierProvider(
-      create: (context) => ThemeProvider(), child: MyApp()));
+      create: (context) => ThemeProvider(), child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -72,13 +69,13 @@ class MyApp extends StatelessWidget {
       //     return const LoginPage();
       //   },
       // ),
-      home: HomePage(),
+      home: const HomePage(),
       routes: {
-        '/login': (context) => LoginPage(),
-        '/register': (context) => RegisterPage(),
-        '/home': (context) => HomePage(),
-        '/profile': (context) => ProfilePage(),
-        '/budgets': (context) => BudgetsPage(),
+        '/login': (context) => const LoginPage(),
+        '/register': (context) => const RegisterPage(),
+        '/home': (context) => const HomePage(),
+        '/profile': (context) => const ProfilePage(),
+        '/budgets': (context) => const BudgetsPage(),
       },
     );
   }
@@ -92,11 +89,12 @@ class AppTheme {
 
 class CustomTheme {
   static final lightTheme = ThemeData(
-      primaryColor: Color(0xFF222831),
-      hintColor: Color(0xFF31363F),
+      primaryColor: const Color(0xFF222831),
+      hintColor: const Color(0xFF222831),
       // Add more theme properties as needed
       brightness: Brightness.light,
-      colorScheme: const ColorScheme(background: Color(0xFF222831),
+      colorScheme: const ColorScheme(
+          background: Color(0xFF222831),
           brightness: Brightness.light,
           error: Color(0xFFD20062),
           onBackground: Color(0xFFEEEEEE),
@@ -111,11 +109,12 @@ class CustomTheme {
   );
 
   static final darkTheme = ThemeData(
-      primaryColor: Color(0xFF222831),
-      hintColor: Color(0xFF31363F),
+      primaryColor: const Color(0xFF222831),
+      hintColor: const Color(0xFF222831),
       // Add more theme properties as needed
       brightness: Brightness.dark,
-      colorScheme: ColorScheme(background: Color(0xFFEEEEEE),
+      colorScheme: const ColorScheme(
+          background: Color(0xFFEEEEEE),
           brightness: Brightness.dark,
           error: Color(0xFFD20062),
           onBackground: Color(0xFF000000),
@@ -130,7 +129,7 @@ class CustomTheme {
 
   static final ThemeData cute = ThemeData(
     primaryColor: const Color(0xFF153448),
-    hintColor: const Color(0xFF153448),
+    hintColor: const Color(0xFF000000),
     brightness: Brightness.light,
     colorScheme: const ColorScheme(
       primary: Color(0xFF153448),

@@ -1,7 +1,5 @@
 import 'package:financify/security/firebase-budget-service/firebase-budget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../entities/Budget.dart';
 
@@ -10,18 +8,18 @@ class ModifyBudgetModal {
 
   static Widget build(BuildContext context, Budget budget) {
     return AlertDialog(
-      title: Text('Modify Budget'),
+      title: const Text('Modify Budget'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           TextField(
             controller: TextEditingController(text: budget.name),
-            decoration: InputDecoration(labelText: 'Name'),
+            decoration: const InputDecoration(labelText: 'Name'),
             onChanged: (text) => budget.name = text,
           ),
           TextField(
             controller: TextEditingController(text: budget.amount.toString()),
-            decoration: InputDecoration(labelText: 'Amount'),
+            decoration: const InputDecoration(labelText: 'Amount'),
             onChanged: (text) => budget.amount = double.parse(text),
           ),
         ],

@@ -1,6 +1,5 @@
 import 'package:financify/entities/Budget.dart';
 import 'package:financify/security/user-auth/firebase-auth/firebase-auth-services.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../entities/Expense.dart';
@@ -12,17 +11,14 @@ class AddExpenseModal{
   static final expenseService = FireBaseExpenseService();
   static final budgetService = FireBaseBudgetService();
 
-  static final expenseTitleController = TextEditingController();
+  final expenseTitleController = TextEditingController();
   var  expenseAmountController = TextEditingController();
-  static final expenseDateController = TextEditingController();
-  static final expenseCategoryController = TextEditingController();
-  static final expenseDescriptionController = TextEditingController();
+  final expenseDateController = TextEditingController();
+  final expenseCategoryController = TextEditingController();
+  final expenseDescriptionController = TextEditingController();
 
   void addExpense(Budget budget){
     try{
-
-      print('expenseTitleController.text: ${expenseTitleController.text}');
-      print('expenseAmountController.text: ${expenseAmountController.text}');
 
       if(expenseTitleController.text.isEmpty || expenseAmountController.text.isEmpty ){
         throw Exception('All fields are required');
@@ -40,12 +36,7 @@ class AddExpenseModal{
       );
 
       expenseService.addExpense(expense, budget);
-      print('Expense added successfully!');
-      print('Expense Name: ${expenseTitleController.text}');
-      print('Amount: ${expenseAmountController.text}');
-      print('Date: ${expenseDateController.text}');
-      print('Category: ${expenseCategoryController.text}');
-      print('Description: ${expenseDescriptionController.text}');
+
 
     }catch(e){
       print(e);
@@ -54,31 +45,35 @@ class AddExpenseModal{
 
   Widget build(BuildContext context, Budget budget){
     return AlertDialog(
-      title: Text('Add Expense'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          TextField(
-            controller: expenseTitleController,
-            decoration: InputDecoration(labelText: 'Name'),
-          ),
-          TextField(
-            controller: expenseAmountController,
-            decoration: InputDecoration(labelText: 'Amount'),
-          ),
-          TextField(
-            controller: expenseDateController,
-            decoration: InputDecoration(labelText: 'Date'),
-          ),
-          TextField(
-            controller: expenseCategoryController,
-            decoration: InputDecoration(labelText: 'Category'),
-          ),
-          TextField(
-            controller: expenseDescriptionController,
-            decoration: InputDecoration(labelText: 'Description'),
-          ),
-        ],
+      title: const Text('Add Expense'),
+      content: SingleChildScrollView(
+
+        child: Column(
+
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            TextField(
+              controller: expenseTitleController,
+              decoration: const InputDecoration(labelText: 'Name'),
+            ),
+            TextField(
+              controller: expenseAmountController,
+              decoration: const InputDecoration(labelText: 'Amount'),
+            ),
+            TextField(
+              controller: expenseDateController,
+              decoration: const InputDecoration(labelText: 'Date'),
+            ),
+            TextField(
+              controller: expenseCategoryController,
+              decoration: const InputDecoration(labelText: 'Category'),
+            ),
+            TextField(
+              controller: expenseDescriptionController,
+              decoration: const InputDecoration(labelText: 'Description'),
+            ),
+          ],
+        ),
       ),
       actions: <Widget>[
         ElevatedButton(

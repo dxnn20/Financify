@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:financify/security/firebase-budget-service/firebase-budget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -13,8 +12,8 @@ class AddBudgetModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FireBaseAuthService _auth = FireBaseAuthService();
-    FireBaseBudgetService _budgetService = FireBaseBudgetService();
+    FireBaseAuthService auth = FireBaseAuthService();
+    FireBaseBudgetService budgetService = FireBaseBudgetService();
 
     var budgetNameController = TextEditingController();
     var amountController = TextEditingController();
@@ -24,14 +23,14 @@ class AddBudgetModal extends StatelessWidget {
     void addBudget () async{
 
       try{
-        User? user = _auth.getCurrentUser();
+        User? user = auth.getCurrentUser();
 
         if(user == null){
           throw Exception('User not logged in');
         }
 
-        if(budgetNameController.text.isEmpty || amountController.text.isEmpty || startDateController.text.isEmpty || endDateController.text.isEmpty){
-          throw Exception('All fields are required');
+        if(budgetNameController.text.isEmpty || amountController.text.isEmpty){
+          throw Exception('Fields cannot be empty');
         }
 
         CollectionReference budgets = FirebaseFirestore.instance.collection('budgets');
@@ -40,17 +39,12 @@ class AddBudgetModal extends StatelessWidget {
           userId: user.uid,
           name: budgetNameController.text,
           amount: double.parse(amountController.text),
-          startDate: startDateController.text,
-          endDate: endDateController.text,
-          id: Uuid().v4(),
+          startDate: startDateController.text.isEmpty ? DateTime.now().toString() : startDateController.text,
+          endDate: endDateController.text.isEmpty ? DateTime.now().toString() : endDateController.text,
+          id: const Uuid().v4(),
         );
 
-        await _budgetService.addBudget(budget);
-        print('Budget added successfully!');
-        print('Budget Name: ${budgetNameController.text}');
-        print('Amount: ${amountController.text}');
-        print('Start Date: ${startDateController.text}');
-        print('End Date: ${endDateController.text}');
+        await budgetService.addBudget(budget);
 
       }catch(e){
         print(e);
