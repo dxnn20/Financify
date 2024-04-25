@@ -14,7 +14,6 @@ import '/security/user-auth/firebase-auth/firebase-auth-services.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
-
   const HomePage({super.key});
 
   @override
@@ -59,7 +58,7 @@ class _HomePageState extends State<HomePage> {
       clickCounts[buttonKey] = (clickCounts[buttonKey] ?? 0) + 1;
     });
     // Save click counts to SharedPreferences
-    prefs.setInt (buttonKey, clickCounts[buttonKey]!);
+    prefs.setInt(buttonKey, clickCounts[buttonKey]!);
   }
 
   String formatDate(DateTime date) {
@@ -85,11 +84,9 @@ class _HomePageState extends State<HomePage> {
       TextButton.icon(
         key: const Key('Budgets'),
         onPressed: () {
-          if(clickCounts['Budgets'] != null) {
+          if (clickCounts['Budgets'] != null) {
             incrementClickCount('Budgets');
           }
-
-          print(clickCounts['Budgets']);
 
           Navigator.pushNamed(context, '/budgets');
         },
@@ -100,9 +97,7 @@ class _HomePageState extends State<HomePage> {
         label: Text(
           'Budgets',
           style: TextStyle(
-            color: Theme.of(context)
-                .colorScheme
-                .onPrimary,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
       ),
@@ -110,46 +105,34 @@ class _HomePageState extends State<HomePage> {
         key: const Key('AddBudget'),
         icon: Icon(
           Icons.add,
-          color: Theme.of(context)
-              .colorScheme
-              .onPrimary,
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
         onPressed: () {
           incrementClickCount('AddBudget');
-          print(clickCounts['AddBudget']);
           openAddBudgetModal(context);
         },
         label: Text(
           'Add Budget',
           style: TextStyle(
-            color: Theme.of(context)
-                .colorScheme
-                .onPrimary,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
       ),
       TextButton.icon(
         key: const Key('Profile'),
         onPressed: () {
-
           incrementClickCount('Profile');
-          print(clickCounts['Profile']);
 
-          Navigator.pushNamed(
-              context, '/profile');
+          Navigator.pushNamed(context, '/profile');
         },
         icon: Icon(
           Icons.person,
-          color: Theme.of(context)
-              .colorScheme
-              .onPrimary,
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
         label: Text(
           'Profile',
           style: TextStyle(
-            color: Theme.of(context)
-                .colorScheme
-                .onPrimary,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
       ),
@@ -157,22 +140,16 @@ class _HomePageState extends State<HomePage> {
         key: const Key('SetGoal'),
         onPressed: () {
           incrementClickCount('SetGoal');
-          print(clickCounts['SetGoal']);
-          openSetBudgetGoalModal(
-              context);
+          openSetBudgetGoalModal(context);
         },
         icon: Icon(
           Icons.arrow_outward,
-          color: Theme.of(context)
-              .colorScheme
-              .onPrimary,
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
         label: Text(
           'Set Goal',
           style: TextStyle(
-            color: Theme.of(context)
-                .colorScheme
-                .onPrimary,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
       ),
@@ -194,13 +171,10 @@ class _HomePageState extends State<HomePage> {
       }
 
       final countA = clickCounts[keyA] ?? 0;
-      final countB = clickCounts[keyB]?? 0;
-
+      final countB = clickCounts[keyB] ?? 0;
 
       return countB.compareTo(countA); // Sort in descending order
     });
-
-    print(buffer);
 
     return buffer;
   }
@@ -209,8 +183,7 @@ class _HomePageState extends State<HomePage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return SetBudgetGoalModal(
-            context); // Widget for the modal bottom sheet
+        return SetBudgetGoalModal(context); // Widget for the modal bottom sheet
       },
     );
   }
@@ -226,29 +199,28 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
-    buildPlaceholder(){
+    buildPlaceholder() {
       return Container(
-        width: 30,
-        constraints: const BoxConstraints(
+          width: 30,
+          constraints: const BoxConstraints(
             minHeight: 50,
-            maxWidth: 200,),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onSurface,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            width: 1,
+            maxWidth: 200,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).colorScheme.primary,
-              blurRadius: 20,
-              offset: const Offset(0, 0),
-              spreadRadius: 3,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.onSurface,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              width: 1,
             ),
-          ],
-        )
-        );
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).colorScheme.primary,
+                blurRadius: 20,
+                offset: const Offset(0, 0),
+                spreadRadius: 3,
+              ),
+            ],
+          ));
     }
 
     return Scaffold(
@@ -436,73 +408,119 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                   Align(
-                                    child:LayoutBuilder(
-                                          builder: (context, constraints) {
-                                            if (constraints.maxWidth > 600) {
-                                              // Check if the screen width is larger than 600
-                                              return Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: (sortedButtons.isEmpty) ?
-                                                    [buildPlaceholder(), buildPlaceholder(), buildPlaceholder(), buildPlaceholder()] :
-                                                    sortedButtons
-                                                ,
-
-                                              );
-                                            } else {
-                                              return Column(
+                                    child: LayoutBuilder(
+                                      builder: (context, constraints) {
+                                        if (constraints.maxWidth > 600) {
+                                          // Check if the screen width is larger than 600
+                                          return Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: (sortedButtons.isEmpty)
+                                                ? [
+                                                    buildPlaceholder(),
+                                                    buildPlaceholder(),
+                                                    buildPlaceholder(),
+                                                    buildPlaceholder()
+                                                  ]
+                                                : sortedButtons,
+                                          );
+                                        } else {
+                                          return Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                alignment: Alignment.center,
+                                                constraints:
+                                                    const BoxConstraints(
+                                                        maxWidth: 230,
+                                                        minWidth: 100),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  border: Border.all(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                  ),
+                                                ),
+                                                child: TextButton.icon(
+                                                  icon: Icon(
+                                                    Icons.add,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onPrimary,
+                                                  ),
+                                                  onPressed: () {
+                                                    openAddBudgetModal(context);
+                                                  },
+                                                  label: Text(
+                                                    'Add Budget',
+                                                    style: TextStyle(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onPrimary,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 5,
+                                              ),
+                                              Container(
+                                                alignment: Alignment.center,
+                                                constraints:
+                                                    const BoxConstraints(
+                                                        maxWidth: 230,
+                                                        minWidth: 100),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  border: Border.all(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary,
+                                                  ),
+                                                ),
+                                                child: TextButton.icon(
+                                                  onPressed: () {
+                                                    Navigator.pushNamed(
+                                                        context, '/profile');
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.person,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onPrimary,
+                                                  ),
+                                                  label: Text(
+                                                    'Profile',
+                                                    style: TextStyle(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onPrimary,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 5,
+                                              ),
+                                              Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
                                                 children: [
                                                   Container(
-                                                    alignment: Alignment.center,
                                                     constraints:
                                                         const BoxConstraints(
-                                                            maxWidth: 230,
+                                                            maxWidth: 200,
                                                             minWidth: 100),
                                                     decoration: BoxDecoration(
                                                       borderRadius:
-                                                          BorderRadius.circular(20),
-                                                      border: Border.all(
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .primary,
-                                                      ),
-                                                    ),
-                                                    child: TextButton.icon(
-                                                      icon: Icon(
-                                                        Icons.add,
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .onPrimary,
-                                                      ),
-                                                      onPressed: () {
-                                                        openAddBudgetModal(context);
-                                                      },
-                                                      label: Text(
-                                                        'Add Budget',
-                                                        style: TextStyle(
-                                                          color: Theme.of(context)
-                                                              .colorScheme
-                                                              .onPrimary,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Container(
-                                                    alignment: Alignment.center,
-                                                    constraints:
-                                                        const BoxConstraints(
-                                                            maxWidth: 230,
-                                                            minWidth: 100),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(20),
+                                                          BorderRadius.circular(
+                                                              20),
                                                       border: Border.all(
                                                         color: Theme.of(context)
                                                             .colorScheme
@@ -512,115 +530,72 @@ class _HomePageState extends State<HomePage> {
                                                     child: TextButton.icon(
                                                       onPressed: () {
                                                         Navigator.pushNamed(
-                                                            context, '/profile');
+                                                            context,
+                                                            '/budgets');
                                                       },
                                                       icon: Icon(
-                                                        Icons.person,
+                                                        Icons.attach_money,
                                                         color: Theme.of(context)
                                                             .colorScheme
                                                             .onPrimary,
                                                       ),
                                                       label: Text(
-                                                        'Profile',
+                                                        'Budgets',
                                                         style: TextStyle(
-                                                          color: Theme.of(context)
-                                                              .colorScheme
-                                                              .onPrimary,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .onPrimary,
                                                         ),
                                                       ),
                                                     ),
                                                   ),
                                                   const SizedBox(
-                                                    height: 5,
+                                                    width: 5,
                                                   ),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.center,
-                                                    children: [
-                                                      Container(
-                                                        constraints:
-                                                            const BoxConstraints(
-                                                                maxWidth: 200,
-                                                                minWidth: 100),
-                                                        decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  20),
-                                                          border: Border.all(
-                                                            color: Theme.of(context)
-                                                                .colorScheme
-                                                                .primary,
-                                                          ),
-                                                        ),
-                                                        child: TextButton.icon(
-                                                          onPressed: () {
-                                                            Navigator.pushNamed(
-                                                                context,
-                                                                '/budgets');
-                                                          },
-                                                          icon: Icon(
-                                                            Icons.attach_money,
-                                                            color: Theme.of(context)
-                                                                .colorScheme
-                                                                .onPrimary,
-                                                          ),
-                                                          label: Text(
-                                                            'Budgets',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Theme.of(context)
-                                                                      .colorScheme
-                                                                      .onPrimary,
-                                                            ),
-                                                          ),
+                                                  Container(
+                                                    constraints:
+                                                        const BoxConstraints(
+                                                            maxWidth: 200,
+                                                            minWidth: 100),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                      border: Border.all(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .primary,
+                                                      ),
+                                                    ),
+                                                    child: TextButton.icon(
+                                                      onPressed: () {
+                                                        openSetBudgetGoalModal(
+                                                            context);
+                                                      },
+                                                      icon: Icon(
+                                                        Icons.arrow_outward,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onPrimary,
+                                                      ),
+                                                      label: Text(
+                                                        'Set Goal',
+                                                        style: TextStyle(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .onPrimary,
                                                         ),
                                                       ),
-                                                      const SizedBox(
-                                                        width: 5,
-                                                      ),
-                                                      Container(
-                                                        constraints:
-                                                            const BoxConstraints(
-                                                                maxWidth: 200,
-                                                                minWidth: 100),
-                                                        decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  20),
-                                                          border: Border.all(
-                                                            color: Theme.of(context)
-                                                                .colorScheme
-                                                                .primary,
-                                                          ),
-                                                        ),
-                                                        child: TextButton.icon(
-                                                          onPressed: () {
-                                                            openSetBudgetGoalModal(
-                                                                context);
-                                                          },
-                                                          icon: Icon(
-                                                            Icons.arrow_outward,
-                                                            color: Theme.of(context)
-                                                                .colorScheme
-                                                                .onPrimary,
-                                                          ),
-                                                          label: Text(
-                                                            'Set Goal',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Theme.of(context)
-                                                                      .colorScheme
-                                                                      .onPrimary,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
+                                                    ),
                                                   ),
                                                 ],
-                                              );
-                                            }
-                                          },
+                                              ),
+                                            ],
+                                          );
+                                        }
+                                      },
                                     ),
                                   ),
                                 ],

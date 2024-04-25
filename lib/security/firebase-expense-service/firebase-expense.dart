@@ -101,36 +101,39 @@ class FireBaseExpenseService{
 
   Future<List<Expense>> getLast5Expenses() async {
     try {
-
       List<Budget> budgets = await FireBaseBudgetService().getBudgets();
 
       if (budgets.isEmpty) {
         return [];
       }
-      // Load the expenses of the first budget
-      Budget firstBudget;
 
-      while(true) {
-        firstBudget = budgets.first;
-        if ((await FireBaseBudgetService().getExpensesByBudgetId(firstBudget.id)).isNotEmpty ){
+      Budget? firstBudget;
+
+      // Find the first budget with expenses
+      for (final budget in budgets) {
+        final expenses = await FireBaseBudgetService().getExpensesByBudgetId(budget.id);
+        if (expenses.isNotEmpty) {
+          firstBudget = budget;
           break;
         }
-        budgets.removeAt(0);
       }
 
+      // If no budget with expenses was found
+      if (firstBudget == null) {
+        return [];
+      }
+
+      // Get expenses of the first budget
       List<Expense> expenses = await FireBaseExpenseService().getExpensesByBudgetId(firstBudget.id);
 
       // Return the first 5 expenses
-      if(expenses.length < 5) {
-        return expenses;
-      }
-
       return expenses.take(5).toList();
     } catch (e) {
       print('Error getting last 5 expenses: $e');
       return [];
     }
   }
+
 
   Future getExpensesByBudgetId (String id) async {
     var data = await _firebaseAuth.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).collection('budgets').doc(id).collection('expenses').orderBy('date', descending: true).get();
