@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../main.dart';
+import '../page-components/ChangePasswordModal.dart';
 import '../security/user-auth/firebase-auth/firebase-auth-services.dart';
 import 'home-page.dart';
 
@@ -161,7 +162,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   .colorScheme
                                                   .background),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return ChangePasswordModal();
+                                        },
+                                      );
+
+                                    },
                                     child: Text(
                                       'Change Password',
                                       style: TextStyle(

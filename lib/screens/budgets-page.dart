@@ -1,4 +1,3 @@
-
 import 'package:financify/page-components/AddExpenseModal.dart';
 import 'package:financify/page-components/ModifyBudgetModal.dart';
 import 'package:financify/security/firebase-budget-service/firebase-budget.dart';
@@ -59,7 +58,6 @@ class _BudgetsPageState extends State<BudgetsPage> {
 
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
         child: Stack(
           children: [
             //menu container
@@ -110,317 +108,364 @@ class _BudgetsPageState extends State<BudgetsPage> {
               ),
             ),
             //Page Container
-            Column(
-              children: [
-                //Main Card
-                Container(
-                  margin: const EdgeInsets.only(top: 20),
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  constraints: const BoxConstraints(
-                      maxWidth: 900, minWidth: 250, minHeight: 100),
-                  child: Card(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    elevation: 5.0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            constraints: const BoxConstraints(
-                                maxWidth: 500),
-                            padding: const EdgeInsets.only(
-                                top: 40, left: 10, right: 0, bottom: 0),
-                            child: Column(
+
+            Center(
+              child: Container(
+                alignment: Alignment.topCenter,
+                width: MediaQuery.of(context).size.width * 0.7,
+                height: MediaQuery.of(context).size.height,
+                constraints: const BoxConstraints(maxWidth: 900, minWidth: 250),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      //Main Card
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        width: MediaQuery.of(context).size.width * 0.7,
+                        constraints: const BoxConstraints(
+                            maxWidth: 900, minWidth: 250, minHeight: 100),
+                        child: Card(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          elevation: 5.0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Text(
-                                  'What a time to plan a vacation!',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                    fontSize: 24,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: LayoutBuilder(
-                                    builder: (context, constraints) {
-                                      if (constraints.maxWidth > 300) {
-                                        return Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment
-                                                .center,
-                                            children: [
-                                              Text(
-                                                'Why not...',
-                                                style: TextStyle(
-                                                  color: Theme
-                                                      .of(context)
-                                                      .colorScheme
-                                                      .onPrimary,
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.5,
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 500),
+                                  padding: const EdgeInsets.only(
+                                      top: 40, left: 10, right: 0, bottom: 0),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        'What a time to plan a vacation!',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                          fontSize: 24,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: LayoutBuilder(
+                                          builder: (context, constraints) {
+                                            if (constraints.maxWidth > 300) {
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      'Why not...',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onPrimary,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    TextButton.icon(
+                                                        style: ButtonStyle(
+                                                          backgroundColor:
+                                                              MaterialStateProperty
+                                                                  .all(
+                                                            Theme.of(context)
+                                                                .colorScheme
+                                                                .background,
+                                                          ),
+                                                        ),
+                                                        icon: Icon(Icons.add,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .onSurface),
+                                                        onPressed: () {
+                                                          openAddBudgetModal(
+                                                              context);
+                                                        },
+                                                        label: Text(
+                                                          'Add a budget',
+                                                          style: TextStyle(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .onSurface,
+                                                          ),
+                                                        )),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Text('for it?',
+                                                        style: TextStyle(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .onPrimary,
+                                                        )),
+                                                  ],
                                                 ),
-                                              ),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              TextButton.icon(
-                                                  style: ButtonStyle(
-                                                    backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                      Theme
-                                                          .of(context)
-                                                          .colorScheme
-                                                          .background,
-                                                    ),
-                                                  ),
-                                                  icon: Icon(Icons.add,
-                                                      color: Theme
-                                                          .of(context)
-                                                          .colorScheme
-                                                          .onSurface),
-                                                  onPressed: () {
-                                                    openAddBudgetModal(context);
-                                                  },
-                                                  label: Text(
-                                                    'Add a budget',
-                                                    style: TextStyle(
-                                                      color: Theme
-                                                          .of(context)
-                                                          .colorScheme
-                                                          .onSurface,
-                                                    ),
-                                                  )
-                                              ),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text('for it?',
+                                              );
+                                            }
+                                            return Column(
+                                              children: [
+                                                Text(
+                                                  'Why not...',
                                                   style: TextStyle(
-                                                    color: Theme
-                                                        .of(context)
+                                                    color: Theme.of(context)
                                                         .colorScheme
                                                         .onPrimary,
-                                                  )),
-
-                                            ],
-                                          ),
-                                        );
-                                      }
-                                      return Column(
-                                        children: [
-                                          Text(
-                                            'Why not...',
-                                            style: TextStyle(
-                                              color: Theme
-                                                  .of(context)
-                                                  .colorScheme
-                                                  .onPrimary,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          TextButton.icon(
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                MaterialStateProperty.all(
-                                                  Theme
-                                                      .of(context)
-                                                      .colorScheme
-                                                      .background,
+                                                  ),
                                                 ),
-                                              ),
-                                              icon: Icon(Icons.add,
-                                                  color: Theme
-                                                      .of(context)
-                                                      .colorScheme
-                                                      .onSurface),
-                                              onPressed: () {
-                                                openAddBudgetModal(context);
-                                              },
-                                              label: Text(
-                                                'Add a budget',
-                                                style: TextStyle(
-                                                  color: Theme
-                                                      .of(context)
-                                                      .colorScheme
-                                                      .onSurface,
+                                                const SizedBox(
+                                                  height: 10,
                                                 ),
-                                              )
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text('for it?',
-                                              style: TextStyle(
-                                                color: Theme
-                                                    .of(context)
-                                                    .colorScheme
-                                                    .onPrimary,
-                                              )),
-                                        ],
-                                      );
-                                    },
-                                    ),
+                                                TextButton.icon(
+                                                    style: ButtonStyle(
+                                                      backgroundColor:
+                                                          MaterialStateProperty
+                                                              .all(
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .background,
+                                                      ),
+                                                    ),
+                                                    icon: Icon(Icons.add,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onSurface),
+                                                    onPressed: () {
+                                                      openAddBudgetModal(
+                                                          context);
+                                                    },
+                                                    label: Text(
+                                                      'Add a budget',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onSurface,
+                                                      ),
+                                                    )),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text('for it?',
+                                                    style: TextStyle(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onPrimary,
+                                                    )),
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
                                   ),
+                                ),
                               ],
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: Container(
-                    alignment: Alignment.topCenter,
-                    constraints:
-                        const BoxConstraints(maxWidth: 900, minWidth: 250),
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        width: MediaQuery.of(context).size.width * 0.7,
-                        height: MediaQuery.of(context).size.height * 0.3,
-                        constraints:
-                            const BoxConstraints(maxWidth: 900, minWidth: 250),
-                        child: StreamBuilder(
-                            stream: FireBaseBudgetService().getBudgetsStream(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              } else if (snapshot.hasError) {
-                                return Center(
-                                    child: Text('Error: ${snapshot.error}'));
-                              } else {
-                                // Extract the list of budgets from the snapshot
-                                List<Budget> budgets =
-                                    snapshot.data as List<Budget>;
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        'Your Budgets',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontSize: 24,
+                        ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Container(
+                          alignment: Alignment.topCenter,
+                          constraints: const BoxConstraints(
+                              maxWidth: 900, minWidth: 250),
+                          child: Align(
+                            alignment: Alignment.topCenter,
+                            child: Container(
+                              padding: const EdgeInsets.all(20),
+                              margin: const EdgeInsets.only(top: 20),
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              height: MediaQuery.of(context).size.height * 0.5,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.surface,
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(30)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    blurRadius: 15,
+                                    offset: const Offset(0, 0),
+                                    spreadRadius: 5,
+                                  )
+                                ],
+                              ),
+                              constraints: const BoxConstraints(
+                                  maxWidth: 900, minWidth: 250),
+                              child: StreamBuilder(
+                                  stream: FireBaseBudgetService()
+                                      .getBudgetsStream(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const Center(
+                                          child: CircularProgressIndicator());
+                                    } else if (snapshot.hasError) {
+                                      return Center(
+                                          child:
+                                              Text('Error: ${snapshot.error}'));
+                                    } else {
+                                      // Extract the list of budgets from the snapshot
+                                      List<Budget> budgets =
+                                          snapshot.data as List<Budget>;
 
-                                return ListView.builder(
-                                    itemCount: budgets.length,
-                                    itemBuilder: (context, index) {
-                                      return GestureDetector(
-                                        onTap: null,
-                                        child: Card(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(12.0),
-                                            ),
-                                            elevation: 5.0,
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                openViewBudgetAndExpensesModal(
-                                                    context, budgets[index]);
-                                              },
-                                              child: ListTile(
-                                                title: Text(
-                                                  budgets[index].name,
-                                                  style: TextStyle(
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .onPrimary,
+                                      return ListView.builder(
+                                          itemCount: budgets.length,
+                                          itemBuilder: (context, index) {
+                                            return GestureDetector(
+                                              onTap: null,
+                                              child: Card(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12.0),
                                                   ),
-                                                ),
-                                                subtitle: Text(
-                                                  '${budgets[index].amount as num}\$',
-                                                  style: TextStyle(
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .onPrimary,
-                                                  ),
-                                                ),
-                                                trailing: SafeArea(
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      IconButton(
-                                                        style: ButtonStyle(
-                                                            iconColor:
-                                                                MaterialStateProperty
-                                                                    .all(
-                                                          Theme.of(context)
-                                                              .colorScheme
-                                                              .onPrimary,
-                                                        )),
-                                                        icon: const Icon(
-                                                            Icons.edit),
-                                                        onPressed: () {
-                                                          openEditModal(context,
-                                                              budgets[index]);
-                                                        },
+                                                  elevation: 5.0,
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      openViewBudgetAndExpensesModal(
+                                                          context,
+                                                          budgets[index]);
+                                                    },
+                                                    child: ListTile(
+                                                      title: Text(
+                                                        budgets[index].name,
+                                                        style: TextStyle(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .onPrimary,
+                                                        ),
                                                       ),
-                                                      IconButton(
-                                                        style: ButtonStyle(
-                                                            iconColor:
-                                                                MaterialStateProperty
-                                                                    .all(
-                                                          Theme.of(context)
-                                                              .colorScheme
-                                                              .onPrimary,
-                                                        )),
-                                                        icon: const Icon(
-                                                            Icons.add),
-                                                        onPressed: () {
-                                                          openAddExpenseModal(
-                                                              context,
-                                                              budgets[index]);
-                                                        },
+                                                      subtitle: Text(
+                                                        '${budgets[index].amount as num}\$',
+                                                        style: TextStyle(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .onPrimary,
+                                                        ),
                                                       ),
-                                                      IconButton(
-                                                        style: ButtonStyle(
-                                                            iconColor:
-                                                                MaterialStateProperty
-                                                                    .all(
-                                                          Theme.of(context)
-                                                              .colorScheme
-                                                              .onPrimary,
-                                                        )),
-                                                        icon: const Icon(
-                                                            Icons.delete),
-                                                        onPressed: () {
-                                                          FireBaseBudgetService()
-                                                              .deleteBudget(
-                                                                  budgets[index]
-                                                                      .id);
-                                                        },
+                                                      trailing: SafeArea(
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            IconButton(
+                                                              style:
+                                                                  ButtonStyle(
+                                                                      iconColor:
+                                                                          MaterialStateProperty
+                                                                              .all(
+                                                                Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .onPrimary,
+                                                              )),
+                                                              icon: const Icon(
+                                                                  Icons.edit),
+                                                              onPressed: () {
+                                                                openEditModal(
+                                                                    context,
+                                                                    budgets[
+                                                                        index]);
+                                                              },
+                                                            ),
+                                                            IconButton(
+                                                              style:
+                                                                  ButtonStyle(
+                                                                      iconColor:
+                                                                          MaterialStateProperty
+                                                                              .all(
+                                                                Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .onPrimary,
+                                                              )),
+                                                              icon: const Icon(
+                                                                  Icons.add),
+                                                              onPressed: () {
+                                                                openAddExpenseModal(
+                                                                    context,
+                                                                    budgets[
+                                                                        index]);
+                                                              },
+                                                            ),
+                                                            IconButton(
+                                                              style:
+                                                                  ButtonStyle(
+                                                                      iconColor:
+                                                                          MaterialStateProperty
+                                                                              .all(
+                                                                Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .onPrimary,
+                                                              )),
+                                                              icon: const Icon(
+                                                                  Icons.delete),
+                                                              onPressed: () {
+                                                                FireBaseBudgetService()
+                                                                    .deleteBudget(
+                                                                        budgets[index]
+                                                                            .id);
+                                                              },
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            )),
-                                      );
-                                    });
-                              }
-                              throw UnimplementedError();
-                            }),
+                                                    ),
+                                                  )),
+                                            );
+                                          });
+                                    }
+                                    throw UnimplementedError();
+                                  }),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
           ],
         ),
       ),
-    ),
     );
   }
 }

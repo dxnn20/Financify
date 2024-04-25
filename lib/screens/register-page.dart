@@ -4,7 +4,7 @@ import '../main.dart';
 
 import '/security/user-auth/firebase-auth/firebase-auth-services.dart';
 
-class RegisterPage extends StatefulWidget{
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
   @override
@@ -12,22 +12,23 @@ class RegisterPage extends StatefulWidget{
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final _formKey = GlobalKey<FormState>();
 
-  TextEditingController emailController = TextEditingController();
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
+  String? _email;
+  String? _username;
+  String? _password;
   final FireBaseAuthService _auth = FireBaseAuthService();
 
-  void _signUp(){
-
-    if(emailController.text.isEmpty || usernameController.text.isEmpty || passwordController.text.isEmpty){
+  void _signUp() {
+    if (_email!.isEmpty || _username!.isEmpty || _password!.isEmpty) {
       return;
-    }else if (passwordController.text.length < 6){
+    } else if (_password!.length < 6) {
       return;
     }
 
-    _auth.signUpWithEmailAndPassword(emailController.text, passwordController.text, usernameController.text).then((value) {
+    _auth
+        .signUpWithEmailAndPassword(_email!, _password!, _username!)
+        .then((value) {
       Navigator.pushNamed(context, '/login');
       print('User signed up successfully');
     }).catchError((error) {
@@ -35,22 +36,22 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
-  bool _validateEmail(){
-    if(emailController.text.isEmpty || !emailController.text.contains('@') || !emailController.text.contains('.')){
+  bool _validateEmail() {
+    if (_email!.isEmpty || !_email!.contains('@') || !_email!.contains('.')) {
       return false;
     }
     return true;
   }
 
-  bool _validateUsername(){
-    if(usernameController.text.isEmpty){
+  bool _validateUsername() {
+    if (_username!.isEmpty) {
       return false;
     }
     return true;
   }
 
-  bool _validatePassword(){
-    if(passwordController.text.isEmpty || passwordController.text.length < 6){
+  bool _validatePassword() {
+    if (_password == null || _password!.length < 6) {
       return false;
     }
     return true;
@@ -61,18 +62,6 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       body: Stack(
         children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: Container(
-                margin: const EdgeInsets.all(50),
-                child: IconButton(
-                  onPressed: () {
-                    Provider.of<ThemeProvider>(context, listen: false)
-                        .toggleTheme();
-                  },
-                  icon: const Icon(Icons.sunny),
-                )),
-          ),
           Align(
             alignment: Alignment.topCenter,
             child: Container(
@@ -86,97 +75,175 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ),
           ),
-          Center(
+          Align(
+            alignment: Alignment.topRight,
             child: Container(
-              width: 300,
-              margin: const EdgeInsets.only(bottom: 20),
-              height: 150,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(20)
+              margin: const EdgeInsets.all(50),
+              child: IconButton(
+                onPressed: () {
+                  Provider.of<ThemeProvider>(context, listen: false)
+                      .toggleTheme();
+                },
+                icon: const Icon(Icons.sunny),
+              ),
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            alignment: Alignment.center,
+            child: Center(
+              child: Align(
+                alignment: Alignment.center,
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
+                    autovalidateMode: AutovalidateMode.disabled,
+                    child: Column(
+                      children: [
+
+
+                        Center(
+                          child: Container(
+                            width: 300,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.background,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                width: 1,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Theme.of(context).hintColor,
+                                  blurRadius: 15,
+                                  offset: const Offset(10, 10),
+                                  spreadRadius: 5,
+                                ),
+                              ],
+                            ),
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                const Text(
+                                  'Sign up',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                _buildEmailForm(),
+                                SizedBox(height: 16),
+                                _buildUsernameForm(),
+                                SizedBox(height: 16),
+                                _buildPasswordForm(),
+                                SizedBox(height: 16),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      print('Valid email: $_email');
+                                      print('Valid username: $_username');
+                                      print('Valid password: $_password');
+                                      _signUp();
+                                    }
+
+
+
+                                  },
+                                  child: Text('Submit',
+                                      style: TextStyle(
+                                        color: Theme.of(context).colorScheme.background,
+                                      )),
+                                ),
+                                SizedBox(height: 16),
+                                Text('Have an account?'),
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Theme.of(context).colorScheme.onSecondary,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, '/login');
+                                  },
+                                  child: Text('Login'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
-          Center(
-              child: Container(
-                width: 300,
-                height: 430,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    width: 1,
-                  ),
-                ),
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Text('Sign up',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    TextField(
-                      controller: emailController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Email',
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    TextFormField(
-                      controller: usernameController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Username',
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextFormField(
-                      showCursor: true,
-                      controller: passwordController,
-                      decoration: const InputDecoration(
-                        //errorText: 'Password must be at least 6 characters',
-                        border: OutlineInputBorder(),
-                        labelText: 'Password',
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty || value.length < 6) {
-                          return 'Password must be at least 6 characters';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 15),
-                    ElevatedButton(
-                      onPressed: () {
-                        _signUp();
-                      },
-                      child: Text('Sign up!',
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                        )
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/login');
-                      },
-                      child: Text('Or Login',
-                        style: TextStyle(
-                          color: Theme.of(context).secondaryHeaderColor,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-          ),
         ],
       ),
     );
+  }
+
+
+  Widget _buildEmailForm() {
+    return TextFormField(
+      decoration: const InputDecoration(
+        labelText: 'Email',
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter your email'; // Error message for empty input
+        }
+        if (!isValidEmail(value)) {
+          return 'Please enter a valid email'; // Error message for invalid email pattern
+        }
+        return null; // Return null if input is valid
+      },
+      onChanged: (value) {
+        _email = value;
+      },
+    );
+  }
+
+  Widget _buildUsernameForm() {
+    return TextFormField(
+      decoration: InputDecoration(
+        labelText: 'Username',
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter your username'; // Error message for empty input
+        }
+        return null; // Return null if input is valid
+      },
+      onChanged: (value) {
+        _username = value;
+      },
+    );
+  }
+
+  Widget _buildPasswordForm() {
+    return TextFormField(
+      decoration: InputDecoration(
+        labelText: 'Password',
+      ),
+      obscureText: true, // Hide password text
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter your password'; // Error message for empty input
+        }
+        if (value.length < 6) {
+          return 'Password must be at least 6 characters long'; // Error message for password length
+        }
+        return null; // Return null if input is valid
+      },
+      onChanged: (value) {
+        _password = value;
+      },
+    );
+  }
+
+
+  bool isValidEmail(String email) {
+    // Use RegExp to match email pattern
+    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
   }
 }

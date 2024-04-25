@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FireBaseAuthService{
@@ -23,9 +25,17 @@ class FireBaseAuthService{
           password: password
       );
       await userCredential.user!.updateDisplayName(username);
+      await userCredential.user!.updatePhotoURL('');
       return userCredential.user;
     } on FirebaseAuthException {
       rethrow;
+    }
+  }
+
+  Future<void> setBudgetGoal(double budgetGoal) async {
+    User? user = _firebaseAuth.currentUser;
+    if (user != null) {
+      await user.updatePhotoURL(budgetGoal.toString());
     }
   }
 
@@ -39,5 +49,21 @@ class FireBaseAuthService{
 
   Future<User?> getFutureCurrentUser(){
     return Future.value(_firebaseAuth.currentUser);
+  }
+
+  String getBudgetGoal(){
+    User? user = _firebaseAuth.currentUser;
+    if (user != null) {
+      return user.photoURL ?? '0.0';
+    }
+    return '0.0';
+  }
+
+  Stream getBudgetGoalStream() {
+    StreamController streamController = StreamController();
+
+    streamController.add(_firebaseAuth.currentUser?.photoURL);
+
+    return streamController.stream;
   }
 }

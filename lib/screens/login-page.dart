@@ -14,34 +14,28 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   User? user = FirebaseAuth.instance.currentUser;
-  String invalidCred = '';
-  String emptyField = '';
+
+  String? _email;
+  String? _password;
+
+  String? err;
 
   @override
   Widget build(BuildContext context) {
     final FireBaseAuthService auth = FireBaseAuthService();
 
-    TextEditingController emailController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
+    final _formKey = GlobalKey<FormState>();
 
     void login() {
-      if (emailController.text.isEmpty || passwordController.text.isEmpty) {
-        setState(() {
-          invalidCred = '';
-          emptyField = 'Please fill in all fields';
-        });
+      if (_email!.isEmpty || _password!.isEmpty) {
         return;
       }
 
-      auth
-          .signInWithEmailAndPassword(
-              emailController.text, passwordController.text)
-          .then((value) {
+      auth.signInWithEmailAndPassword(_email!, _password!).then((value) {
         Navigator.pushNamed(context, '/home');
-      }).catchError((error) {
+      }).catchError((onError) {
         setState(() {
-          emptyField = '';
-          invalidCred = error.toString();
+          err = 'Invalid email or password';
         });
       });
     }
@@ -59,17 +53,19 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Stack(
         children: [
-          Positioned.fill(
+          Align(
+            alignment: Alignment.topCenter,
             child: Container(
-              decoration: const BoxDecoration(
-                  // image: DecorationImage(
-                  //   image: AssetImage("assets/media/1x/login-bg.png"),
-                  //   fit: BoxFit.cover,
-                  // ),
-                  ),
+              margin: const EdgeInsets.only(top: 50),
+              child: const Text(
+                'Financify',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
-          // Theme toggle button
           Align(
             alignment: Alignment.topRight,
 
@@ -84,97 +80,145 @@ class _LoginPageState extends State<LoginPage> {
                   icon: const Icon(Icons.sunny),
                 )),
           ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              margin: const EdgeInsets.only(top: 50),
-              child: const Text(
-                'Financify',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
+          Center(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                      width: 300,
+                      height: 400,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Theme.of(context).colorScheme.background,
+                        border: Border.all(
+                          width: 1,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Theme.of(context).hintColor,
+                            blurRadius: 15,
+                            offset: const Offset(10, 10),
+                            spreadRadius: 5,
+                          ),
+                        ],
+                      ),
+                      padding: const EdgeInsets.all(20),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Form(
+                              key: _formKey,
+                              autovalidateMode: AutovalidateMode.disabled,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  const Text(
+                                    'Login',
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  _buildEmailForm(),
+                                  const SizedBox(height: 20),
+                                  _buildPasswordForm(),
+                                  const SizedBox(height: 20),
+                                  if (err != null)
+                                    Text(
+                                      '$err',
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .error,
+                                      ),
+                                    ),
+                                  const SizedBox(height: 20),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        login();
+                                      }
+                                      ;
+                                    },
+                                    child: Text(
+                                      'Login',
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  const Text('No Account?'),
+                                  const SizedBox(height: 10),
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pushNamed(
+                                            context, '/register');
+                                      },
+                                      child: Text('Register',
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .secondaryHeaderColor,
+                                          ))),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+                ],
               ),
             ),
           ),
-          Center(
-              child: Container(
-            width: 300,
-            height: 400,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color: Theme.of(context).colorScheme.background,
-              border: Border.all(
-                width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Theme.of(context).hintColor,
-                    blurRadius: 15,
-                    offset: const Offset(10, 10),
-                    spreadRadius: 5,
-                  ),
-                ],
-              ),
-              padding: const EdgeInsets.all(20),
-              child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const Text(
-                  'Login',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                TextField(
-                  controller: emailController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Username',
-                  ),
-                ),
-                const SizedBox(height: 20),
-                TextField(
-                  controller: passwordController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Password',
-                  ),
-                ),
-                const SizedBox(height: 20),
-                if(invalidCred.isNotEmpty)
-                  Text('Invalid credentials', style: TextStyle(color: Colors.red)),
-                if(emptyField.isNotEmpty)
-                  Text('Please fill in all fields', style: TextStyle(color: Colors.red)),
-
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    login();
-                  },
-                  child: Text(
-                    'Login',
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onPrimary),
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-                TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/register');
-                    },
-                    child: Text('Or Register',
-                        style: TextStyle(
-                          color: Theme.of(context).secondaryHeaderColor,
-                        ))),
-              ],
-            ),
-          )),
         ],
       ),
+    );
+  }
+
+  Widget _buildEmailForm() {
+    return TextFormField(
+      decoration: const InputDecoration(
+        labelText: 'Email',
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter your email'; // Error message for empty input
+        }
+        if (!isValidEmail(value)) {
+          return 'Please enter a valid email'; // Error message for invalid email pattern
+        }
+        return null; // Return null if input is valid
+      },
+      onChanged: (value) {
+        _email = value;
+      },
+    );
+  }
+
+  bool isValidEmail(String email) {
+    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
+  }
+
+  Widget _buildPasswordForm() {
+    return TextFormField(
+      obscureText: true,
+      decoration: const InputDecoration(
+        labelText: 'Password',
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter your password'; // Error message for empty input
+        }
+        if (value.length < 6) {
+          return 'Password must be at least 6 characters long'; // Error message for password length
+        }
+        return null; // Return null if input is valid
+      },
+      onChanged: (value) {
+        _password = value;
+      },
     );
   }
 }

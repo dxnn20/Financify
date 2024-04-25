@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:financify/entities/Budget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -52,23 +54,17 @@ class FireBaseBudgetService {
     }
   }
 
-  Future<num> getBudgetsSum() async {
-    try {
-      var budgets = await _firebaseAuth
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('budgets')
-          .get();
-      num sum = 0;
-
-      for (var element in budgets.docs) {
-        sum += element['amount'];
-      }
-
-      return sum;
-    } on FirebaseAuthException {
-      rethrow;
-    }
+  Stream getBudgetsSumStream(){
+    return _firebaseAuth
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('budgets')
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return doc['amount'];
+      }).toList();
+    });
   }
 
   Future getBudgets() async {
@@ -191,5 +187,34 @@ class FireBaseBudgetService {
     return expenses;
 
   }
+
+
+// Function to get budgets as a stream
+  Stream<List<Budget>> getBudgetsStreamAsList() async* {
+    StreamController<List<Budget>> _budgetStreamController = StreamController<List<Budget>>();
+
+    var data = await _firebaseAuth
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('budgets')
+        .snapshots();
+
+    await for (var snap in data) {
+      List<Budget> budgets = [];
+      for (var element in snap.docs) {
+        Budget budget = Budget(
+          userId: element['userId'],
+          id: element['budgetId'],
+          name: element['name'],
+          amount: element['amount'].toDouble(),
+          startDate: element['startdate'],
+          endDate: element['enddate'],
+        );
+        budgets.add(budget);
+      }
+      yield budgets;
+    }
+  }
+
 
 }

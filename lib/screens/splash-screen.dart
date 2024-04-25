@@ -1,4 +1,6 @@
 
+import 'package:financify/screens/home-page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
@@ -17,9 +19,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     void initState() {
       super.initState();
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-      Future.delayed(const Duration(seconds: 1), () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => const LoginPage()));
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.of(context).pushNamed(
+          FirebaseAuth.instance.currentUser == null ? '/login' : '/home'
+        );
       });
     }
 

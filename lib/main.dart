@@ -3,8 +3,10 @@ import 'package:financify/screens/home-page.dart';
 import 'package:financify/screens/login-page.dart';
 import 'package:financify/screens/profile-page.dart';
 import 'package:financify/screens/register-page.dart';
+import 'package:financify/screens/splash-screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 
@@ -32,16 +34,21 @@ class ThemeProvider with ChangeNotifier {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
   runApp(ChangeNotifierProvider(
-      create: (context) => ThemeProvider(), child: const MyApp()));
+      create: (context) => ThemeProvider(), child: MyApp(prefs: prefs))
+
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final SharedPreferences prefs;
+
+  const MyApp({required this.prefs});
 
   // This widget is the root of your application.
   @override
@@ -69,11 +76,11 @@ class MyApp extends StatelessWidget {
       //     return const LoginPage();
       //   },
       // ),
-      home: const HomePage(),
+      home: const SplashScreen(),
       routes: {
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
-        '/home': (context) => const HomePage(),
+        '/home': (context) => HomePage(),
         '/profile': (context) => const ProfilePage(),
         '/budgets': (context) => const BudgetsPage(),
       },
