@@ -14,6 +14,8 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
 
+  bool isUsed = false;
+
   String? _email;
   String? _username;
   String? _password;
@@ -32,29 +34,11 @@ class _RegisterPageState extends State<RegisterPage> {
       Navigator.pushNamed(context, '/login');
       print('User signed up successfully');
     }).catchError((error) {
-      print('Error: $error');
+      print('Error: ${error.toString()}');
+      setState(() {
+        isUsed = true;
+      });
     });
-  }
-
-  bool _validateEmail() {
-    if (_email!.isEmpty || !_email!.contains('@') || !_email!.contains('.')) {
-      return false;
-    }
-    return true;
-  }
-
-  bool _validateUsername() {
-    if (_username!.isEmpty) {
-      return false;
-    }
-    return true;
-  }
-
-  bool _validatePassword() {
-    if (_password == null || _password!.length < 6) {
-      return false;
-    }
-    return true;
   }
 
   @override
@@ -101,8 +85,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     autovalidateMode: AutovalidateMode.disabled,
                     child: Column(
                       children: [
-
-
                         Center(
                           child: Container(
                             width: 300,
@@ -133,33 +115,40 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                 ),
                                 _buildEmailForm(),
-                                SizedBox(height: 16),
+                                const SizedBox(height: 16),
                                 _buildUsernameForm(),
-                                SizedBox(height: 16),
+                                const SizedBox(height: 16),
                                 _buildPasswordForm(),
-                                SizedBox(height: 16),
+                                const SizedBox(height: 16),
+                                if(isUsed)
+                                  const Text('Email is already in use',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                  ),
+                                  ),
                                 ElevatedButton(
                                   onPressed: () {
                                     if (_formKey.currentState!.validate()) {
-                                      print('Valid email: $_email');
-                                      print('Valid username: $_username');
-                                      print('Valid password: $_password');
+                                      setState(() {
+                                        isUsed = false;
+                                      });
                                       _signUp();
                                     }
-
-
-
                                   },
                                   child: Text('Submit',
                                       style: TextStyle(
-                                        color: Theme.of(context).colorScheme.background,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .background,
                                       )),
                                 ),
-                                SizedBox(height: 16),
-                                Text('Have an account?'),
+                                const SizedBox(height: 16),
+                                const Text('Have an account?'),
                                 TextButton(
                                   style: TextButton.styleFrom(
-                                    foregroundColor: Theme.of(context).colorScheme.onSecondary,
+                                    foregroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .onSecondary,
                                   ),
                                   onPressed: () {
                                     Navigator.pushNamed(context, '/login');
@@ -181,7 +170,6 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
-
 
   Widget _buildEmailForm() {
     return TextFormField(
@@ -240,7 +228,6 @@ class _RegisterPageState extends State<RegisterPage> {
       },
     );
   }
-
 
   bool isValidEmail(String email) {
     // Use RegExp to match email pattern

@@ -479,26 +479,30 @@ class _HomePageState extends State<HomePage> {
                                               children: [
                                                 Container(
                                                     width: constraints.maxWidth,
-                                                    constraints: BoxConstraints(
-                                                        maxWidth: 200),
+                                                    constraints:
+                                                        const BoxConstraints(
+                                                            maxWidth: 200),
                                                     child: sortedButtons[0]),
                                                 const SizedBox(height: 5),
                                                 Container(
                                                     width: constraints.maxWidth,
-                                                    constraints: BoxConstraints(
-                                                        maxWidth: 200),
+                                                    constraints:
+                                                        const BoxConstraints(
+                                                            maxWidth: 200),
                                                     child: sortedButtons[1]),
                                                 const SizedBox(height: 5),
                                                 Container(
                                                     width: constraints.maxWidth,
-                                                    constraints: BoxConstraints(
-                                                        maxWidth: 200),
+                                                    constraints:
+                                                        const BoxConstraints(
+                                                            maxWidth: 200),
                                                     child: sortedButtons[2]),
                                                 const SizedBox(height: 5),
                                                 Container(
                                                     width: constraints.maxWidth,
-                                                    constraints: BoxConstraints(
-                                                        maxWidth: 200),
+                                                    constraints:
+                                                        const BoxConstraints(
+                                                            maxWidth: 200),
                                                     child: sortedButtons[3]),
                                               ]);
                                         }
@@ -560,7 +564,7 @@ class _HomePageState extends State<HomePage> {
                                             value: double.parse(_auth
                                                         .getBudgetGoal()) ==
                                                     0
-                                                ? 0
+                                                ? 0.01
                                                 : (totalBudgetsSum /
                                                             double.parse(_auth
                                                                 .getBudgetGoal()) <
@@ -605,13 +609,12 @@ class _HomePageState extends State<HomePage> {
                                 constraints: const BoxConstraints(
                                     maxWidth: 1000, minWidth: 250),
                                 child:
-                                    Flex(direction: Axis.vertical,
-                                        children: [
-                                          Container(
+                                    Flex(direction: Axis.vertical, children: [
+                                  Container(
                                       width: MediaQuery.of(context).size.width,
                                       constraints: const BoxConstraints(
                                           maxHeight: 300,
-                                          maxWidth: 700,
+                                          maxWidth: 1000,
                                           minWidth: 250),
                                       decoration: BoxDecoration(
                                         color: Theme.of(context)
@@ -729,11 +732,9 @@ class _HomePageState extends State<HomePage> {
                                                   );
                                                 }),
                                           ))),
-
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20,
                                   ),
-
                                   const TipsCard(),
                                 ]),
                               ),

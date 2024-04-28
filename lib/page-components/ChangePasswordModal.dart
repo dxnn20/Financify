@@ -31,6 +31,7 @@ class ChangePasswordModal extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             TextFormField(
+              obscureText: true,
               decoration: const InputDecoration(
                   labelText: 'Current Password',),
               controller: currentPasswordController,
@@ -47,6 +48,7 @@ class ChangePasswordModal extends StatelessWidget {
               },
             ),
             TextFormField(
+              obscureText: true,
               key: formFieldKey,
               controller: newPasswordController,
               decoration: const InputDecoration(labelText: 'New Password'),
@@ -63,6 +65,7 @@ class ChangePasswordModal extends StatelessWidget {
               },
             ),
             TextFormField(
+              obscureText: true,
               controller: newPasswordConfirmController,
               decoration:
                   const InputDecoration(labelText: 'Confirm New Password'),

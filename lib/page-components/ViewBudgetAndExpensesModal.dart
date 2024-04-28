@@ -53,6 +53,7 @@ class ViewBudgetAndExpensesModal extends StatelessWidget {
       ),
       content: Center(
         child: Container(
+          padding: const EdgeInsets.all(20),
           width: MediaQuery.of(context).size.width * 0.5,
           height: MediaQuery.of(context).size.height * 0.5,
           constraints: const BoxConstraints(maxHeight: 900, maxWidth: 900),
@@ -62,7 +63,7 @@ class ViewBudgetAndExpensesModal extends StatelessWidget {
               width: 1,
               color: Theme.of(context).colorScheme.onSurface,
             ),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(15),
           ),
           child: SingleChildScrollView(
             child: Column(
