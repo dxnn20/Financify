@@ -2,49 +2,88 @@ import 'package:financify/security/user-auth/firebase-auth/firebase-auth-service
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ChangePasswordModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var formKey = GlobalKey<FormState>();
+    var formFieldKey = GlobalKey<FormFieldState>();
 
     TextEditingController currentPasswordController = TextEditingController();
-    TextEditingController newPasswordConfirmController = TextEditingController();
+    TextEditingController newPasswordConfirmController =
+        TextEditingController();
     TextEditingController newPasswordController = TextEditingController();
 
-    validatePassword(String password){
-      if(password.length < 6){
+    validatePassword(String password) {
+      if (password.length < 6) {
         return 'Password must be at least 6 characters';
-      }
-      return null;
-    }
-
-    _validateConfirmPassword(String password, String confirmPassword){
-      if(password != confirmPassword){
-        return 'Passwords do not match';
       }
       return null;
     }
 
     return AlertDialog(
       title: const Text('Change Password'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          TextField(
-            decoration: InputDecoration(labelText: 'Current Password',
-            errorText: validatePassword(currentPasswordController.text)
+      content: Form(
+        key: formKey,
+        autovalidateMode: AutovalidateMode.disabled,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            TextFormField(
+              decoration: const InputDecoration(
+                  labelText: 'Current Password',),
+              controller: currentPasswordController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+
+                if (validatePassword(value) != null) {
+                  return 'Password must be at least 6 characters';
+                }
+
+                return null;
+              },
             ),
-            controller: currentPasswordController,
-          ),
-          TextFormField(
-            controller: newPasswordController,
-            decoration: const InputDecoration(labelText: 'New Password'),
-          ),
-          TextFormField(
-            controller: newPasswordConfirmController,
-            decoration: const InputDecoration(labelText: 'Confirm New Password'),
-          ),
-        ],
+            TextFormField(
+              key: formFieldKey,
+              controller: newPasswordController,
+              decoration: const InputDecoration(labelText: 'New Password'),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+
+                if (validatePassword(value) != null) {
+                  return 'Password must be at least 6 characters';
+                }
+
+                return null;
+              },
+            ),
+            TextFormField(
+              controller: newPasswordConfirmController,
+              decoration:
+                  const InputDecoration(labelText: 'Confirm New Password'),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+
+                if(validatePassword(value) != null){
+                  return 'Password must be at least 6 characters';
+                }
+
+                if (value != formFieldKey.currentState!.value) {
+                  return 'Passwords do not match';
+                }
+
+                return null;
+              }
+            ),
+          ],
+        ),
       ),
       actions: <Widget>[
         ElevatedButton(
@@ -57,23 +96,33 @@ class ChangePasswordModal extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         ElevatedButton(
-          child: Text('Save',
+          child: Text(
+            'Save',
             style: TextStyle(
               color: Theme.of(context).colorScheme.onPrimary,
             ),
           ),
           onPressed: () {
-            if(validatePassword(newPasswordController.text) != null){
+
+            if(formKey.currentState?.validate() == false){
               return;
             }
-            if(newPasswordController.text != newPasswordConfirmController.text){
+
+            if (validatePassword(newPasswordController.text) != null) {
               return;
             }
-            if(FireBaseAuthService().getCurrentUser()?.updatePassword(newPasswordController.text) != null)
-            {
+            if (newPasswordController.text !=
+                newPasswordConfirmController.text) {
+              return;
+            }
+            if (FireBaseAuthService()
+                    .getCurrentUser()
+                    ?.updatePassword(newPasswordController.text) !=
+                null) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('Password changed successfully',
+                  content: Text(
+                    'Password changed successfully',
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -88,7 +137,4 @@ class ChangePasswordModal extends StatelessWidget {
       ],
     );
   }
-
-  
-  
 }

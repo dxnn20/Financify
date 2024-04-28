@@ -1,6 +1,7 @@
 
 import 'dart:async';
 
+import 'package:financify/security/firebase-budget-service/firebase-budget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FireBaseAuthService{

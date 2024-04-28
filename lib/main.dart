@@ -80,7 +80,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
-        '/home': (context) => HomePage(),
+        '/home': (context) => const HomePage(),
         '/profile': (context) => const ProfilePage(),
         '/budgets': (context) => const BudgetsPage(),
       },

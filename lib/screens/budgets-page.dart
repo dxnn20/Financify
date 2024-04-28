@@ -1,5 +1,7 @@
 import 'package:financify/page-components/AddExpenseModal.dart';
 import 'package:financify/page-components/ModifyBudgetModal.dart';
+import 'package:financify/page-components/addExpense-button.dart';
+import 'package:financify/page-components/tips-card.dart';
 import 'package:financify/security/firebase-budget-service/firebase-budget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -57,64 +59,18 @@ class _BudgetsPageState extends State<BudgetsPage> {
     final FireBaseAuthService auth = FireBaseAuthService();
 
     return Scaffold(
+      floatingActionButton: const addExpenseButton(),
       body: SafeArea(
         child: Stack(
           children: [
-            //menu container
-            Container(
-              margin: const EdgeInsets.all(10),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Column(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.home),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const HomePage()));
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.person),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/profile');
-                      },
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        Provider.of<ThemeProvider>(context, listen: false)
-                            .toggleTheme();
-                      },
-                      icon: const Icon(Icons.sunny),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.attach_money),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/budgets');
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.logout),
-                      onPressed: () {
-                        auth.signOut();
-                        print('User signed out');
-                        Navigator.pushNamed(context, '/login');
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
             //Page Container
-
             Center(
               child: Container(
                 alignment: Alignment.topCenter,
-                width: MediaQuery.of(context).size.width * 0.7,
+                width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
-                constraints: const BoxConstraints(maxWidth: 900, minWidth: 250),
+                constraints:
+                    const BoxConstraints(maxWidth: 1000, minWidth: 250),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -296,15 +252,16 @@ class _BudgetsPageState extends State<BudgetsPage> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width,
                         child: Container(
+                          width: MediaQuery.of(context).size.width,
                           alignment: Alignment.topCenter,
                           constraints: const BoxConstraints(
-                              maxWidth: 900, minWidth: 250),
+                              maxWidth: 1000, minWidth: 250),
                           child: Align(
                             alignment: Alignment.topCenter,
                             child: Container(
-                              padding: const EdgeInsets.all(20),
-                              margin: const EdgeInsets.only(top: 20),
-                              width: MediaQuery.of(context).size.width * 0.7,
+                              padding: const EdgeInsets.all(10),
+                              margin: const EdgeInsets.only(top: 10),
+                              width: MediaQuery.of(context).size.width*0.9,
                               height: MediaQuery.of(context).size.height * 0.5,
                               decoration: BoxDecoration(
                                 color: Theme.of(context).colorScheme.surface,
@@ -314,9 +271,9 @@ class _BudgetsPageState extends State<BudgetsPage> {
                                   BoxShadow(
                                     color:
                                         Theme.of(context).colorScheme.primary,
-                                    blurRadius: 15,
-                                    offset: const Offset(0, 0),
-                                    spreadRadius: 5,
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 5),
+                                    spreadRadius: 3,
                                   )
                                 ],
                               ),
@@ -338,6 +295,18 @@ class _BudgetsPageState extends State<BudgetsPage> {
                                       // Extract the list of budgets from the snapshot
                                       List<Budget> budgets =
                                           snapshot.data as List<Budget>;
+                                      if (budgets.isEmpty) {
+                                        return Center(
+                                          child: Text(
+                                            'No budgets found',
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .background,
+                                            ),
+                                          ),
+                                        );
+                                      }
 
                                       return ListView.builder(
                                           itemCount: budgets.length,
@@ -384,65 +353,144 @@ class _BudgetsPageState extends State<BudgetsPage> {
                                                           mainAxisSize:
                                                               MainAxisSize.min,
                                                           children: [
-                                                            IconButton(
-                                                              style:
-                                                                  ButtonStyle(
-                                                                      iconColor:
-                                                                          MaterialStateProperty
-                                                                              .all(
-                                                                Theme.of(
+                                                            Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: Theme.of(
                                                                         context)
                                                                     .colorScheme
-                                                                    .onPrimary,
-                                                              )),
-                                                              icon: const Icon(
-                                                                  Icons.edit),
-                                                              onPressed: () {
-                                                                openEditModal(
-                                                                    context,
-                                                                    budgets[
-                                                                        index]);
-                                                              },
+                                                                    .background,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              constraints:
+                                                                  const BoxConstraints(
+                                                                      maxWidth:
+                                                                          100,
+                                                                      maxHeight:
+                                                                          100),
+                                                              child: IconButton(
+                                                                style:
+                                                                    ButtonStyle(
+                                                                        iconColor:
+                                                                            MaterialStateProperty.all(
+                                                                  Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .onSurface,
+                                                                )),
+                                                                icon: const Icon(
+                                                                    Icons.edit),
+                                                                onPressed: () {
+                                                                  openEditModal(
+                                                                      context,
+                                                                      budgets[
+                                                                          index]);
+                                                                },
+                                                              ),
                                                             ),
-                                                            IconButton(
-                                                              style:
-                                                                  ButtonStyle(
-                                                                      iconColor:
-                                                                          MaterialStateProperty
-                                                                              .all(
-                                                                Theme.of(
-                                                                        context)
-                                                                    .colorScheme
-                                                                    .onPrimary,
-                                                              )),
-                                                              icon: const Icon(
-                                                                  Icons.add),
-                                                              onPressed: () {
-                                                                openAddExpenseModal(
-                                                                    context,
-                                                                    budgets[
-                                                                        index]);
-                                                              },
+                                                            const SizedBox(
+                                                              width: 10,
                                                             ),
-                                                            IconButton(
-                                                              style:
-                                                                  ButtonStyle(
-                                                                      iconColor:
-                                                                          MaterialStateProperty
-                                                                              .all(
-                                                                Theme.of(
+                                                            Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: Theme.of(
                                                                         context)
                                                                     .colorScheme
-                                                                    .onPrimary,
-                                                              )),
-                                                              icon: const Icon(
-                                                                  Icons.delete),
-                                                              onPressed: () {
-                                                                FireBaseBudgetService()
-                                                                    .deleteBudget(
-                                                                        budgets[index]
-                                                                            .id);
-                                                              },
+                                                                    .background,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              child: IconButton(
+                                                                style:
+                                                                    ButtonStyle(
+                                                                        backgroundColor:
+                                                                            MaterialStateProperty.all(
+                                                                  Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .background,
+                                                                )),
+                                                                icon: Icon(
+                                                                  Icons.add,
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .onSurface,
+                                                                ),
+                                                                onPressed: () {
+                                                                  openAddExpenseModal(
+                                                                      context,
+                                                                      budgets[
+                                                                          index]);
+                                                                },
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .colorScheme
+                                                                    .onBackground,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              child: IconButton(
+                                                                style:
+                                                                    ButtonStyle(
+                                                                  iconColor:
+                                                                      MaterialStateProperty
+                                                                          .all(
+                                                                    Theme.of(
+                                                                            context)
+                                                                        .colorScheme
+                                                                        .background,
+                                                                  ),
+                                                                  backgroundColor: MaterialStateProperty.all(Theme.of(
+                                                                          context)
+                                                                      .colorScheme
+                                                                      .onBackground),
+                                                                ),
+                                                                icon: const Icon(
+                                                                    Icons
+                                                                        .delete),
+                                                                onPressed: () {
+                                                                  FireBaseBudgetService()
+                                                                      .deleteBudget(
+                                                                          budgets[index]
+                                                                              .id);
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .showSnackBar(
+                                                                          SnackBar(
+                                                                    backgroundColor: Theme.of(
+                                                                            context)
+                                                                        .colorScheme
+                                                                        .onSurface,
+                                                                    content:
+                                                                        Text(
+                                                                      'Budget deleted successfully',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Theme.of(context)
+                                                                            .colorScheme
+                                                                            .background,
+                                                                      ),
+                                                                    ),
+                                                                  ));
+                                                                },
+                                                              ),
                                                             ),
                                                           ],
                                                         ),
@@ -452,14 +500,73 @@ class _BudgetsPageState extends State<BudgetsPage> {
                                             );
                                           });
                                     }
-                                    throw UnimplementedError();
                                   }),
                             ),
                           ),
                         ),
                       ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        width: MediaQuery.of(context).size.width * 0.7,
+                        constraints: const BoxConstraints(
+                            maxWidth: 900, minWidth: 250, minHeight: 100),
+                        child: const TipsCard(),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
                     ],
                   ),
+                ),
+              ),
+            ),
+            //Navigation Buttons
+            Container(
+              margin: const EdgeInsets.all(10),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Column(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.home),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomePage()));
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.person),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/profile');
+                      },
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Provider.of<ThemeProvider>(context, listen: false)
+                            .toggleTheme();
+                      },
+                      icon: const Icon(Icons.sunny),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.attach_money),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/budgets');
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.logout),
+                      onPressed: () {
+                        auth.signOut();
+                        print('User signed out');
+                        Navigator.pushNamed(context, '/login');
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),

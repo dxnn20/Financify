@@ -7,7 +7,6 @@ import 'package:uuid/uuid.dart';
 
 import '../../entities/Expense.dart';
 
-
 class FireBaseBudgetService {
   final FirebaseFirestore _firebaseAuth = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -34,6 +33,28 @@ class FireBaseBudgetService {
     }
   }
 
+  Future<Budget?> getBudgetByTitle(String title) async {
+    var data = await _firebaseAuth
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('budgets')
+        .where('name', isEqualTo: title)
+        .get();
+
+    if (data.docs.isNotEmpty) {
+      return Budget(
+        userId: data.docs[0]['userId'],
+        id: data.docs[0]['budgetId'],
+        name: data.docs[0]['name'],
+        amount: data.docs[0]['amount'].toDouble(),
+        startDate: data.docs[0]['startdate'],
+        endDate: data.docs[0]['enddate'],
+      );
+    } else {
+      return null;
+    }
+  }
+
   Future<void> updateBudget(Budget budget) async {
     try {
       await _firebaseAuth
@@ -54,7 +75,7 @@ class FireBaseBudgetService {
     }
   }
 
-  Stream getBudgetsSumStream(){
+  Stream getBudgetsSumStream() {
     return _firebaseAuth
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -126,7 +147,6 @@ class FireBaseBudgetService {
   }
 
   Future<List<Expense>> getExpensesByBudgetId(String id) async {
-
     var data = await _firebaseAuth
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -156,8 +176,7 @@ class FireBaseBudgetService {
     return expenses;
   }
 
-  Future<List<Expense>> getExpenses() async{
-
+  Future<List<Expense>> getExpenses() async {
     var data = await _firebaseAuth
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -185,13 +204,12 @@ class FireBaseBudgetService {
     }
 
     return expenses;
-
   }
-
 
 // Function to get budgets as a stream
   Stream<List<Budget>> getBudgetsStreamAsList() async* {
-    StreamController<List<Budget>> _budgetStreamController = StreamController<List<Budget>>();
+    StreamController<List<Budget>> _budgetStreamController =
+        StreamController<List<Budget>>();
 
     var data = await _firebaseAuth
         .collection('users')
@@ -215,6 +233,4 @@ class FireBaseBudgetService {
       yield budgets;
     }
   }
-
-
 }

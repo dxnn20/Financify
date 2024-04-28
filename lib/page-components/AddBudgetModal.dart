@@ -1,4 +1,3 @@
-import 'dart:js';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:financify/security/firebase-budget-service/firebase-budget.dart';
@@ -162,6 +161,7 @@ class AddBudgetModal extends StatelessWidget {
               style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             ),
           ),
+          const SizedBox(height: 20.0)
         ],
       ),
     );
