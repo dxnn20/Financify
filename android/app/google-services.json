@@ -30,6 +30,13 @@
             {
               "client_id": "2310216331-4siafs5sutck5n38n5kovi8rc4qfgpf1.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "2310216331-h70he7fk9es03fnmrlrhcsl7f1kfoua9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.financify"
+              }
             }
           ]
         }

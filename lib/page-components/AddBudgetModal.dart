@@ -1,7 +1,8 @@
-
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:financify/security/firebase-budget-service/firebase-budget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -15,6 +16,7 @@ class AddBudgetModal extends StatelessWidget {
   Widget build(BuildContext context) {
     FireBaseAuthService auth = FireBaseAuthService();
     FireBaseBudgetService budgetService = FireBaseBudgetService();
+    FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
     var budgetNameController = TextEditingController();
     var amountController = TextEditingController();
@@ -53,6 +55,14 @@ class AddBudgetModal extends StatelessWidget {
         );
 
         await budgetService.addBudget(budget);
+
+        analytics.logEvent(name: 'add_budget', parameters: {
+          'name': budget.name,
+          'amount': budget.amount,
+          'start_date': budget.startDate,
+          'end_date': budget.endDate,
+        });
+
       } catch (e) {
         print(e);
       }

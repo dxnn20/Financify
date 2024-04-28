@@ -48,7 +48,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   final SharedPreferences prefs;
 
-  const MyApp({required this.prefs});
+  const MyApp({super.key, required this.prefs});
 
   // This widget is the root of your application.
   @override
@@ -59,23 +59,6 @@ class MyApp extends StatelessWidget {
       theme: Provider
           .of<ThemeProvider>(context)
           .currentTheme,
-      //home: SplashScreen(),
-      //home: HomePage(),
-      // home: FutureBuilder(
-      //   future: FirebaseAuth.instance.authStateChanges().first,
-      //   builder: (context, AsyncSnapshot<User?> snapshot) {
-      //     print(snapshot.connectionState);
-      //     print(snapshot.hasData);
-      //
-      //     if (snapshot.connectionState == ConnectionState.waiting) {
-      //       return const CircularProgressIndicator();
-      //     }
-      //     if (snapshot.hasData) {
-      //       return const HomePage();
-      //     }
-      //     return const LoginPage();
-      //   },
-      // ),
       home: const SplashScreen(),
       routes: {
         '/login': (context) => const LoginPage(),
