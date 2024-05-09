@@ -2,7 +2,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:financify/security/firebase-budget-service/firebase-budget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -68,8 +67,9 @@ class AddBudgetModal extends StatelessWidget {
       }
     }
 
-    return Container(
-      padding: const EdgeInsets.all(16.0),
+    return SingleChildScrollView(
+      child: Container(
+      padding: const EdgeInsets.all(20.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -174,6 +174,7 @@ class AddBudgetModal extends StatelessWidget {
           const SizedBox(height: 20.0)
         ],
       ),
+    ),
     );
   }
 }
